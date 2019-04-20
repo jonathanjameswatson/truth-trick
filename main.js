@@ -48,7 +48,7 @@ const convert = (infix) => {
 const newExpression = () => {
   const tokens = tokenize(expression.value);
   const variables = new Set(tokens.filter(token => strRegex.test(token)));
-  convert(tokens.slice(2));
+  const exp = convert(tokens);
 };
 
 const operator = (symbol) => {
