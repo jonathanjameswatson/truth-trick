@@ -37,7 +37,6 @@ const convert = (infix) => {
         postfix.push(pop(stack));
         top += 1;
       }
-
       stack.push(token);
     }
   });
