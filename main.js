@@ -23,6 +23,7 @@ const operations1 = {
 const operations2 = {
   '∧': (a, b) => (a && b),
   '∨': (a, b) => (a || b),
+  '⊕': (a, b) => (a ? !b : b),
 };
 
 const conversion = {
