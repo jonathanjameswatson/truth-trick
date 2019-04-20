@@ -44,10 +44,45 @@ const convert = (infix) => {
   return postfix.concat(stack);
 };
 
+const evaluate = (exp) => {
+  return exp;
+};
+
+const getInputs = (length) => {
+  const inputs = [];
+  for (let i = 0; i < 2 ** length; i += 1) {
+    const binary = (Number(i).toString(2).split(''));
+    const zeroes = [];
+    zeroes.length = length - binary.length;
+    zeroes.fill('0');
+    inputs.push(zeroes.concat(binary));
+  }
+
+  return inputs;
+};
+
+const getOutputs = (exp, inputs) => {
+  const outputs = [];
+  inputs.forEach((input) => {
+    let replacedExp = exp;
+    replacedExp = replacedExp.map((token) => {
+      if (strRegex.test(token)) {
+        return input.shift();
+      }
+      return token;
+    });
+    outputs.push(evaluate(replacedExp));
+  });
+
+  return outputs;
+};
+
 const newExpression = () => {
   const tokens = tokenize(expression.value);
-  const variables = new Set(tokens.filter(token => strRegex.test(token)));
+  const variables = [...new Set(tokens.filter(token => strRegex.test(token)))];
   const exp = convert(tokens);
+  const inputs = getInputs(variables.length);
+  const outputs = getOutputs(exp, inputs);
 };
 
 const operator = (symbol) => {
@@ -60,3 +95,5 @@ const operator = (symbol) => {
   expression.selectionEnd = expression.selectionStart;
   newExpression();
 };
+
+newExpression();
