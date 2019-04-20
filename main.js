@@ -2,9 +2,29 @@ const expression = document.getElementById('expression');
 const truthTable = document.getElementById('truth-table');
 const karnaughMap = document.getElementById('karnaugh-map');
 
+const otherSymbols = {
+  '.': '∧',
+  '^': '∧',
+  '&': '∧',
+  AND: '∧',
+  '+': '∨',
+  '|': '∨',
+  OR: '∨',
+  '!': '¬',
+  NOT: '∨',
+  '⊻': '⊕',
+  XOR: '∨',
+  '>': '→',
+  '=': '≡',
+  '⊙': '≡',
+  XNOR: '≡',
+};
+
 const squeezeRegex = /\s+/g;
 const tokenRegex = /[A-Z]+|[01]+|\W/gi;
-const tokenize = exp => exp.replace(squeezeRegex, '').match(tokenRegex);
+const escapeRegex = /[-[\]{}()*+?.,\\^$|#\s]/g;
+const replaceRegex = new RegExp(Object.keys(otherSymbols).map(key => key.replace(escapeRegex, '\\$&')).join('|'), 'gi');
+const tokenize = exp => exp.replace(squeezeRegex, '').replace(replaceRegex, key => otherSymbols[key]).match(tokenRegex);
 const strRegex = /[A-Z]+/i;
 const alphaNum = /[A-Z01]/i;
 
