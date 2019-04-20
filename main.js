@@ -89,10 +89,12 @@ const operator = (symbol) => {
   const start = expression.selectionStart;
   const before = expression.value.substring(0, start);
   const after = expression.value.substring(expression.selectionEnd, expression.value.length);
+
   expression.value = (before + symbol + after);
   expression.focus();
   expression.selectionStart = start + 1;
   expression.selectionEnd = expression.selectionStart;
+
   newExpression();
 };
 
