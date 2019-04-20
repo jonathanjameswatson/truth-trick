@@ -52,10 +52,7 @@ const getInputs = (length) => {
   const inputs = [];
   for (let i = 0; i < 2 ** length; i += 1) {
     const binary = (Number(i).toString(2).split(''));
-    const zeroes = [];
-    zeroes.length = length - binary.length;
-    zeroes.fill('0');
-    inputs.push(zeroes.concat(binary));
+    inputs.push(new Array(length - binary.length).fill('0').concat(binary));
   }
 
   return inputs;
@@ -65,9 +62,11 @@ const getOutputs = (exp, inputs) => {
   const outputs = [];
   inputs.forEach((input) => {
     let replacedExp = exp;
+    let n = -1;
     replacedExp = replacedExp.map((token) => {
       if (strRegex.test(token)) {
-        return input.shift();
+        n += 1;
+        return input[n];
       }
       return token;
     });
