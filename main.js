@@ -9,9 +9,12 @@ const strRegex = /[A-Z]+/i;
 const alphaNum = /[A-Z01]/i;
 
 const precedence = {
-  undefined: 4,
-  '(': 2,
-  '¬': 3,
+  undefined: 7,
+  '¬': 6,
+  '(': 5,
+  '→': 4,
+  '⊕': 3,
+  '≡': 2,
   '∧': 1,
   '∨': 0,
 };
@@ -23,7 +26,9 @@ const operations1 = {
 const operations2 = {
   '∧': (a, b) => (a && b),
   '∨': (a, b) => (a || b),
+  '→': (a, b) => (!a || b),
   '⊕': (a, b) => (a ? !b : b),
+  '≡': (a, b) => (a === b),
 };
 
 const conversion = {
