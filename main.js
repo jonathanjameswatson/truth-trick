@@ -1,5 +1,6 @@
 const expression = document.getElementById('expression');
 const truthTable = document.getElementById('truth-table');
+const karnaughMap = document.getElementById('karnaugh-map');
 
 const squeezeRegex = /\s+/g;
 const tokenRegex = /[A-Z]+|[01]+|\W/gi;
@@ -30,6 +31,8 @@ const conversion = {
   false: '0',
   true: '1',
 };
+
+const gray = i => i ^ (i >> 1);
 
 const convertToPostfix = (infix) => {
   const postfix = [];
@@ -82,6 +85,45 @@ const createTruthTable = (inputs, outputs, variables) => {
   });
 };
 
+const createKarnaughMap = (inputs, outputs, variables) => {
+  const vertical = Math.floor(variables.length / 2);
+  const horizontal = variables.length - vertical;
+
+  karnaughMap.firstElementChild.innerHTML = '';
+
+  const header = karnaughMap.insertRow();
+
+  const key = header.insertCell();
+  key.appendChild(document.createTextNode(`${variables.slice(0, vertical).join('')}\\${variables.slice(vertical).join('')}`));
+
+  for (let i = 0; i < 2 ** horizontal; i += 1) {
+    const cell = header.insertCell();
+    cell.appendChild(document.createTextNode(gray(i).toString(2).padStart(horizontal, '0')));
+  }
+
+  for (let i = 0; i < 2 ** vertical; i += 1) {
+    const row = karnaughMap.insertRow();
+    const firstCell = row.insertCell();
+    firstCell.appendChild(document.createTextNode(gray(i).toString(2).padStart(vertical, '0')));
+
+    for (let j = 0; j < 2 ** horizontal; j += 1) {
+      const cell = row.insertCell();
+      const index = gray(i).toString(2).padStart(vertical, '0') + gray(j).toString(2).padStart(horizontal, '0');
+      cell.appendChild(document.createTextNode(outputs[parseInt(index, 2)]));
+    }
+  }
+
+  /*
+  inputs.forEach((input, i) => {
+    input.forEach((digit) => {
+      const cell = row.insertCell();
+      cell.appendChild(document.createTextNode(digit));
+    });
+    const out = row.insertCell();
+    out.appendChild(document.createTextNode(outputs[i]));
+  }); */
+};
+
 const evaluate = (exp) => {
   const last = exp.pop();
   if (last in operations1) {
@@ -99,8 +141,7 @@ const evaluate = (exp) => {
 const getInputs = (length) => {
   const inputs = [];
   for (let i = 0; i < 2 ** length; i += 1) {
-    const binary = (Number(i).toString(2).split(''));
-    inputs.push(new Array(length - binary.length).fill('0').concat(binary));
+    inputs.push(Number(i).toString(2).padStart(length, '0').split(''));
   }
 
   return inputs;
@@ -130,7 +171,9 @@ const newExpression = () => {
   const exp = convertToPostfix(tokens);
   const inputs = getInputs(variables.length);
   const outputs = getOutputs(exp, inputs);
-  createTruthTable(inputs.slice(), outputs, variables);
+
+  createKarnaughMap(inputs, outputs, variables);
+  createTruthTable(inputs, outputs, variables);
 };
 
 const operator = (symbol) => {
