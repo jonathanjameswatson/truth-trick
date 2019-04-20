@@ -15,7 +15,23 @@ const precedence = {
   '∨': 0,
 };
 
-const convert = (infix) => {
+const operations1 = {
+  '¬': a => (!a),
+};
+
+const operations2 = {
+  '∧': (a, b) => (a && b),
+  '∨': (a, b) => (a || b),
+};
+
+const conversion = {
+  '0': false,
+  '1': true,
+  false: '0',
+  true: '1',
+}
+
+const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
 
@@ -67,7 +83,19 @@ const createTruthTable = (inputs, outputs, variables) => {
 };
 
 const evaluate = (exp) => {
-  return 0;
+  console.log(exp)
+  const last = exp.pop();
+  console.log(last);
+  if (last in operations1) {
+    return operations1[last](evaluate(exp));
+  }
+  if (last in operations2) {
+    return operations2[last](evaluate(exp), evaluate(exp));
+  }
+  if (last in Object.keys(conversion)) {
+    return conversion[last];
+  }
+  return last;
 };
 
 const getInputs = (length) => {
@@ -92,7 +120,7 @@ const getOutputs = (exp, inputs) => {
       }
       return token;
     });
-    outputs.push(evaluate(replacedExp));
+    outputs.push(conversion[evaluate(replacedExp)]);
   });
 
   return outputs;
@@ -101,7 +129,7 @@ const getOutputs = (exp, inputs) => {
 const newExpression = () => {
   const tokens = tokenize(expression.value);
   const variables = [...new Set(tokens.filter(token => strRegex.test(token)))];
-  const exp = convert(tokens);
+  const exp = convertToPostfix(tokens);
   const inputs = getInputs(variables.length);
   const outputs = getOutputs(exp, inputs);
   createTruthTable(inputs.slice(), outputs, variables);
