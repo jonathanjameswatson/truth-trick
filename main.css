@@ -42,8 +42,8 @@ header {
   display: flex;
   justify-content: space-between;
   margin: 1rem auto;
-  width: 20vw;
-  min-width: 14rem;
+  width: 22rem;
+  max-width: 100%;
 }
 
 .operation {
