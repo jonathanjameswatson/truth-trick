@@ -21,12 +21,12 @@
     <input type="text" value="(A∧B)∨¬C" id="expression" oninput="newExpression()"></input>
 
     <div class="button-container">
-      <input type="button" value="∧" class="operation" onclick="operator('∧')"></input>
-      <input type="button" value="∨" class="operation" onclick="operator('∨')"></input>
-      <input type="button" value="¬" class="operation" onclick="operator('¬')"></input>
-      <input type="button" value="→" class="operation" onclick="operator('→')"></input>
-      <input type="button" value="⊕" class="operation" onclick="operator('⊕')"></input>
-      <input type="button" value="≡" class="operation" onclick="operator('≡')"></input>
+      <input type="button" value="∧" class="operation" onclick="operator('∧')" title="AND"></input>
+      <input type="button" value="∨" class="operation" onclick="operator('∨')" title="OR"></input>
+      <input type="button" value="¬" class="operation" onclick="operator('¬')" title="NOT"></input>
+      <input type="button" value="→" class="operation" onclick="operator('→')" title="Material implication"></input>
+      <input type="button" value="⊕" class="operation" onclick="operator('⊕')" title="XOR"></input>
+      <input type="button" value="≡" class="operation" onclick="operator('≡')" title="The complement of XOR"></input>
     </div>
   </header>
 
