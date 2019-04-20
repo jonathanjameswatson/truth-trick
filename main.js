@@ -29,7 +29,7 @@ const conversion = {
   '1': true,
   false: '0',
   true: '1',
-}
+};
 
 const convertToPostfix = (infix) => {
   const postfix = [];
@@ -83,9 +83,7 @@ const createTruthTable = (inputs, outputs, variables) => {
 };
 
 const evaluate = (exp) => {
-  console.log(exp)
   const last = exp.pop();
-  console.log(last);
   if (last in operations1) {
     return operations1[last](evaluate(exp));
   }
