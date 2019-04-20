@@ -1,4 +1,5 @@
 const expression = document.getElementById('expression');
+const truthTable = document.getElementById('truth-table');
 
 const squeezeRegex = /\s+/g;
 const tokenRegex = /[A-Z]+|[01]+|\W/gi;
@@ -44,8 +45,29 @@ const convert = (infix) => {
   return postfix.concat(stack);
 };
 
+const createTruthTable = (inputs, outputs, variables) => {
+  truthTable.firstElementChild.innerHTML = '';
+
+  const header = truthTable.insertRow();
+  variables.push('Q');
+  variables.forEach((variable) => {
+    const cell = header.insertCell();
+    cell.appendChild(document.createTextNode(variable));
+  });
+
+  inputs.forEach((input, i) => {
+    const row = truthTable.insertRow();
+    input.forEach((digit) => {
+      const cell = row.insertCell();
+      cell.appendChild(document.createTextNode(digit));
+    });
+    const out = row.insertCell();
+    out.appendChild(document.createTextNode(outputs[i]));
+  });
+};
+
 const evaluate = (exp) => {
-  return exp;
+  return 0;
 };
 
 const getInputs = (length) => {
@@ -82,6 +104,7 @@ const newExpression = () => {
   const exp = convert(tokens);
   const inputs = getInputs(variables.length);
   const outputs = getOutputs(exp, inputs);
+  createTruthTable(inputs.slice(), outputs, variables);
 };
 
 const operator = (symbol) => {
