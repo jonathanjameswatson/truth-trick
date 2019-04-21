@@ -1,6 +1,10 @@
 const expression = document.getElementById('expression');
 const truthTable = document.getElementById('truth-table');
 const karnaughMap = document.getElementById('karnaugh-map');
+const circuit = document.getElementById('diagram');
+const ctx = circuit.getContext('2d');
+ctx.font = '12px serif';
+const { images } = document;
 
 const otherSymbols = {
   '.': '∧',
@@ -60,6 +64,15 @@ const conversion = {
 
 const gray = i => i ^ (i >> 1);
 
+const names = {
+  '¬': 'NOT',
+  '∧': 'AND',
+  '∨': 'OR',
+  '→': 'IMPLY',
+  '⊕': 'XOR',
+  '≡': 'XNOR',
+};
+
 const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
@@ -88,6 +101,21 @@ const convertToPostfix = (infix) => {
   });
   stack.reverse();
   return postfix.concat(stack);
+};
+
+const createCircuit = (exp, x, y) => {
+  const last = exp.pop();
+  if (last in operations1 || last in operations2) {
+    ctx.drawImage(Array.from(images).find(image => image.attributes.src.value === `images/gates/${names[last]}.svg`), x - 95, y - 25);
+    if (last in operations1) {
+      createCircuit(exp, x - 90, y);
+    } else {
+      createCircuit(exp, x - 90, y - 10);
+      createCircuit(exp, x - 90, y + 10);
+    }
+  } else {
+    ctx.fillText('A', x, y);
+  }
 };
 
 const createTruthTable = (inputs, outputs, variables) => {
@@ -138,16 +166,6 @@ const createKarnaughMap = (inputs, outputs, variables) => {
       cell.appendChild(document.createTextNode(outputs[parseInt(index, 2)]));
     }
   }
-
-  /*
-  inputs.forEach((input, i) => {
-    input.forEach((digit) => {
-      const cell = row.insertCell();
-      cell.appendChild(document.createTextNode(digit));
-    });
-    const out = row.insertCell();
-    out.appendChild(document.createTextNode(outputs[i]));
-  }); */
 };
 
 const evaluate = (exp) => {
@@ -158,7 +176,7 @@ const evaluate = (exp) => {
   if (last in operations2) {
     return operations2[last](evaluate(exp), evaluate(exp));
   }
-  if (last in Object.keys(conversion)) {
+  if (last in conversion) {
     return conversion[last];
   }
   return last;
@@ -198,6 +216,8 @@ const newExpression = () => {
   const inputs = getInputs(variables.length);
   const outputs = getOutputs(exp, inputs);
 
+  ctx.clearRect(0, 0, circuit.width, circuit.height);
+  createCircuit(exp, circuit.width, circuit.height / 2);
   createKarnaughMap(inputs, outputs, variables);
   createTruthTable(inputs, outputs, variables);
 };
