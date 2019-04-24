@@ -3,8 +3,11 @@ const truthTable = document.getElementById('truth-table');
 const karnaughMap = document.getElementById('karnaugh-map');
 const circuit = document.getElementById('diagram');
 const ctx = circuit.getContext('2d');
-ctx.font = '12px serif';
 const { images } = document;
+
+ctx.font = '12px serif';
+circuit.width = circuit.getBoundingClientRect().width;
+circuit.height = circuit.getBoundingClientRect().height;
 
 const otherSymbols = {
   '.': '∧',
@@ -56,8 +59,8 @@ const operations2 = {
 };
 
 const conversion = {
-  '0': false,
-  '1': true,
+  0: false,
+  1: true,
   false: '0',
   true: '1',
 };
@@ -104,17 +107,18 @@ const convertToPostfix = (infix) => {
 };
 
 const createCircuit = (exp, x, y) => {
+  console.log(exp)
   const last = exp.pop();
   if (last in operations1 || last in operations2) {
     ctx.drawImage(Array.from(images).find(image => image.attributes.src.value === `images/gates/${names[last]}.svg`), x - 95, y - 25);
     if (last in operations1) {
       createCircuit(exp, x - 90, y);
     } else {
-      createCircuit(exp, x - 90, y - 10);
       createCircuit(exp, x - 90, y + 10);
+      createCircuit(exp, x - 90, y - 10);
     }
   } else {
-    ctx.fillText('A', x, y);
+    ctx.fillText(last, x, y);
   }
 };
 
