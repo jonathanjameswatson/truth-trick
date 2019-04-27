@@ -7,8 +7,8 @@ const { images } = document;
 
 circuit.width = circuit.getBoundingClientRect().width;
 circuit.height = circuit.getBoundingClientRect().height;
-ctx.textAlign = 'left';
-ctx.textBaseline = 'top';
+ctx.textAlign = 'right';
+ctx.textBaseline = 'middle';
 
 const otherSymbols = {
   '.': '∧',
@@ -130,33 +130,43 @@ const getScale = (exp) => {
   const [depth] = getDepth(exp);
   // const breadth = 1;
   const scale = circuit.width / depth;
-  ctx.font = `${scale * 0.1}px Overpass Mono`;
+  // ctx.font = `${scale * 0.1}px Overpass Mono`;
+  ctx.font = `${scale * 0.1}px serif`;
   ctx.lineWidth = scale * 0.02;
   return scale;
 };
 
-const createCircuit = (exp, x, originalY, scale) => {
+const createCircuit = (exp, x, y, scale, direction = null) => {
   const last = exp.pop();
   if (last in operations1 || last in operations2) {
-    const imageData = ctx.getImageData(x - scale * 0.95,
-      originalY - scale * 0.2, scale * 0.9, scale * 0.4).data;
-    let y = originalY;
-    if (!imageData.every(pixel => !pixel)) {
-      y -= scale * 0.25;
+    let offset = 0;
+    if (direction === 'down') {
+      offset = scale * -0.15;
       ctx.beginPath();
-      ctx.moveTo(x, originalY + scale * 0.01);
+      ctx.moveTo(x, y + scale * 0.16);
       ctx.lineTo(x, y - scale * 0.01);
       ctx.stroke();
+    } else if (direction === 'up') {
+      offset = scale * 0.15;
+      ctx.beginPath();
+      ctx.moveTo(x, y - scale * 0.16);
+      ctx.lineTo(x, y + scale * 0.01);
+      ctx.stroke();
     }
-    ctx.drawImage(Array.from(images).find(image => image.attributes.src.value === `images/gates/${names[last]}.svg`), x - scale * 0.95, y - scale * 0.25, scale, scale * 0.5);
+    ctx.drawImage(Array.from(images).find(image => image.id === names[last]),
+      x - scale * 0.95, y - scale * 0.25 - offset, scale, scale * 0.5);
     if (last in operations1) {
-      createCircuit(exp, x - scale * 0.9, y, scale);
+      if (direction === 'down') {
+        createCircuit(exp, x - scale * 0.9, y + scale * 0.3 + offset, scale, 'down');
+      } else {
+        createCircuit(exp, x - scale * 0.9, y - scale * 0.3 + offset, scale, 'up');
+      }
     } else {
-      createCircuit(exp, x - scale * 0.9, y + scale * 0.1, scale);
-      createCircuit(exp, x - scale * 0.9, y - scale * 0.1, scale);
+      createCircuit(exp, x - scale * 0.9, y + scale * 0.1 - offset, scale, 'down');
+      createCircuit(exp, x - scale * 0.9, y - scale * 0.1 - offset, scale, 'up');
     }
   } else {
-    ctx.fillText(last, x, originalY + scale * 0.02);
+    ctx.fillText(last, x - scale * 0.01, y);
   }
 };
 

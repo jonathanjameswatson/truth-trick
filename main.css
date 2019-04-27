@@ -109,3 +109,8 @@ th, td {
 .overline {
   border-top: 1px solid #111;
 }
+
+.gate {
+  width: 0;
+  height: 0;
+}
