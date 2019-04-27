@@ -88,7 +88,7 @@ const convertToPostfix = (infix) => {
       stack.push(token);
     } else if (token === ')') {
       let top = stack.pop();
-      while (top !== '(') {
+      while (top !== '(' && top !== undefined) {
         postfix.push(top);
         top = stack.pop();
       }
