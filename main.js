@@ -80,6 +80,7 @@ const names = {
 const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
+  let d = 0;
 
   infix.forEach((token) => {
     if (alphaNum.test(token)) {
@@ -96,6 +97,7 @@ const convertToPostfix = (infix) => {
       stack.push(token);
     } else {
       let top = stack.length.length - 1;
+      d = Math.max(d, stack.length + 1);
       while (precedence[top] <= precedence[token]) {
         postfix.push(pop(stack));
         top += 1;
@@ -103,35 +105,14 @@ const convertToPostfix = (infix) => {
       stack.push(token);
     }
   });
+  d = Math.max(d, stack.length);
   stack.reverse();
-  return postfix.concat(stack);
+  return [postfix.concat(stack), d];
 };
 
-const getDepth = (exp, depth = 0) => {
-  let d = depth;
-  let newExp = exp;
-  const last = exp[newExp.length - 1];
-  if (last in operations1) {
-    d += 1;
-    const [newD] = getDepth(newExp.slice(0, -1), d);
-    d = Math.max(d, newD);
-  }
-  if (last in operations2) {
-    d += 1;
-    let newD = 0;
-    [newD, newExp] = getDepth(newExp.slice(0, -1), d);
-    const [newD2] = getDepth(newExp.slice(0, -1), d);
-    d = Math.max(d, newD, newD2);
-  }
-  return [d, newExp.slice(0, -1)];
-};
-
-const getScale = (exp) => {
-  const [depth] = getDepth(exp);
-  // const breadth = 1;
+const getScale = (depth) => {
   const scale = circuit.width / depth;
-  // ctx.font = `${scale * 0.1}px Overpass Mono`;
-  ctx.font = `${scale * 0.1}px serif`;
+  ctx.font = `${scale * 0.1}px Courier`;
   ctx.lineWidth = scale * 0.02;
   return scale;
 };
@@ -264,10 +245,10 @@ const getOutputs = (exp, inputs) => {
 const newExpression = () => {
   const tokens = tokenize(expression.value);
   const variables = [...new Set(tokens.filter(token => strRegex.test(token)))];
-  const exp = convertToPostfix(tokens);
+  const [exp, depth] = convertToPostfix(tokens);
   const inputs = getInputs(variables.length);
   const outputs = getOutputs(exp, inputs);
-  const scale = getScale(exp);
+  const scale = getScale(depth);
 
   ctx.clearRect(0, 0, circuit.width, circuit.height);
   createCircuit(exp, circuit.width, circuit.height / 2, scale);
