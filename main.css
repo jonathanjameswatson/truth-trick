@@ -102,6 +102,8 @@ table {
 th, td {
   border: 1px solid #111;
   height: 1.5rem;
+  overflow: scroll;
+  text-overflow: ellipsis;
 }
 
 .overline {
