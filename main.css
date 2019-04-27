@@ -15,12 +15,14 @@ header {
   margin: 0 auto;
 }
 
-#expression {
+.expression {
   display: block;
   margin: 1rem auto;
   height: 3rem;
   width: 50rem;
   max-width: 100%;
+
+  color: inherit;
 
   font-family: inherit;
   text-align: center;
@@ -34,7 +36,7 @@ header {
   border-radius: 0px;
 }
 
-#expression:focus {
+.expression:focus {
   font-size: 2.1rem;
 }
 

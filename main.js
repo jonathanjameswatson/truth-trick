@@ -1,4 +1,4 @@
-const expression = document.getElementById('expression');
+const expression = document.getElementById('expressionInput');
 const truthTable = document.getElementById('truth-table');
 const karnaughMap = document.getElementById('karnaugh-map');
 const circuit = document.getElementById('diagram');

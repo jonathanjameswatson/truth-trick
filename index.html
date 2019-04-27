@@ -18,7 +18,7 @@
   <header>
     <h1>Truth Trick (WIP)</h1>
 
-    <input type="text" value="(A∧B)∨¬C" id="expression" oninput="newExpression()"></input>
+    <input type="text" value="(A∧B)∨¬C" class="expression" id="expressionInput" oninput="newExpression()"></input>
 
     <div class="button-container">
       <input type="button" value="∧" class="operation" onclick="operator('∧')" title="AND"></input>
@@ -49,27 +49,12 @@
   <h2>Karnaugh Map</h2>
   <table id="karnaugh-map">
     <tr>
-      <th>A\BC</th>
-      <th>00</th>
-      <th>01</th>
-      <th>11</th>
-      <th>10</th>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
+      <th>LOADING</th>
     </tr>
   </table>
+
+  <h2>Simplification</h2>
+  <input type="text" value="(A∧B)∨¬C" class="expression" id="expressionOutput" disabled></input>
 
   <footer>
     <div class="button-container overline">
