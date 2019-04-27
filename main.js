@@ -7,8 +7,8 @@ const { images } = document;
 
 circuit.width = circuit.getBoundingClientRect().width;
 circuit.height = circuit.getBoundingClientRect().height;
-ctx.textAlign = 'right';
-ctx.textBaseline = 'middle';
+ctx.textAlign = 'left';
+ctx.textBaseline = 'top';
 
 const otherSymbols = {
   '.': '∧',
@@ -114,7 +114,7 @@ const getDepth = (exp, depth = 0) => {
   if (last in operations1) {
     d += 1;
     const [newD] = getDepth(newExp.slice(0, -1), d);
-    d = newD > d ? newD : d;
+    d = Math.max(d, newD);
   }
   if (last in operations2) {
     d += 1;
@@ -131,12 +131,23 @@ const getScale = (exp) => {
   // const breadth = 1;
   const scale = circuit.width / depth;
   ctx.font = `${scale * 0.1}px Overpass Mono`;
+  ctx.lineWidth = scale * 0.02;
   return scale;
 };
 
-const createCircuit = (exp, x, y, scale) => {
+const createCircuit = (exp, x, originalY, scale) => {
   const last = exp.pop();
   if (last in operations1 || last in operations2) {
+    const imageData = ctx.getImageData(x - scale * 0.95,
+      originalY - scale * 0.2, scale * 0.9, scale * 0.4).data;
+    let y = originalY;
+    if (!imageData.every(pixel => !pixel)) {
+      y -= scale * 0.25;
+      ctx.beginPath();
+      ctx.moveTo(x, originalY + scale * 0.01);
+      ctx.lineTo(x, y - scale * 0.01);
+      ctx.stroke();
+    }
     ctx.drawImage(Array.from(images).find(image => image.attributes.src.value === `images/gates/${names[last]}.svg`), x - scale * 0.95, y - scale * 0.25, scale, scale * 0.5);
     if (last in operations1) {
       createCircuit(exp, x - scale * 0.9, y, scale);
@@ -145,7 +156,7 @@ const createCircuit = (exp, x, y, scale) => {
       createCircuit(exp, x - scale * 0.9, y - scale * 0.1, scale);
     }
   } else {
-    ctx.fillText(last, x, y);
+    ctx.fillText(last, x, originalY + scale * 0.02);
   }
 };
 
