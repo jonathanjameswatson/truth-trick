@@ -7,6 +7,8 @@ const { images } = document;
 
 circuit.width = circuit.getBoundingClientRect().width;
 circuit.height = circuit.getBoundingClientRect().height;
+ctx.textAlign = 'right';
+ctx.textBaseline = 'middle';
 
 const otherSymbols = {
   '.': '∧',
@@ -128,7 +130,7 @@ const getScale = (exp) => {
   const [depth] = getDepth(exp);
   // const breadth = 1;
   const scale = circuit.width / depth;
-  ctx.font = `${scale * 0.1}px serif`;
+  ctx.font = `${scale * 0.1}px Overpass Mono`;
   return scale;
 };
 
