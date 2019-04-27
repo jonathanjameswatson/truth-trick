@@ -5,7 +5,6 @@ const circuit = document.getElementById('diagram');
 const ctx = circuit.getContext('2d');
 const { images } = document;
 
-ctx.font = '12px serif';
 circuit.width = circuit.getBoundingClientRect().width;
 circuit.height = circuit.getBoundingClientRect().height;
 
@@ -106,16 +105,42 @@ const convertToPostfix = (infix) => {
   return postfix.concat(stack);
 };
 
-const createCircuit = (exp, x, y) => {
-  console.log(exp)
+const getDepth = (exp, depth = 0) => {
+  let d = depth;
+  let newExp = exp;
+  const last = exp[newExp.length - 1];
+  if (last in operations1) {
+    d += 1;
+    const [newD] = getDepth(newExp.slice(0, -1), d);
+    d = newD > d ? newD : d;
+  }
+  if (last in operations2) {
+    d += 1;
+    let newD = 0;
+    [newD, newExp] = getDepth(newExp.slice(0, -1), d);
+    const [newD2] = getDepth(newExp.slice(0, -1), d);
+    d = Math.max(d, newD, newD2);
+  }
+  return [d, newExp.slice(0, -1)];
+};
+
+const getScale = (exp) => {
+  const [depth] = getDepth(exp);
+  // const breadth = 1;
+  const scale = circuit.width / depth;
+  ctx.font = `${scale * 0.1}px serif`;
+  return scale;
+};
+
+const createCircuit = (exp, x, y, scale) => {
   const last = exp.pop();
   if (last in operations1 || last in operations2) {
-    ctx.drawImage(Array.from(images).find(image => image.attributes.src.value === `images/gates/${names[last]}.svg`), x - 95, y - 25);
+    ctx.drawImage(Array.from(images).find(image => image.attributes.src.value === `images/gates/${names[last]}.svg`), x - scale * 0.95, y - scale * 0.25, scale, scale * 0.5);
     if (last in operations1) {
-      createCircuit(exp, x - 90, y);
+      createCircuit(exp, x - scale * 0.9, y, scale);
     } else {
-      createCircuit(exp, x - 90, y + 10);
-      createCircuit(exp, x - 90, y - 10);
+      createCircuit(exp, x - scale * 0.9, y + scale * 0.1, scale);
+      createCircuit(exp, x - scale * 0.9, y - scale * 0.1, scale);
     }
   } else {
     ctx.fillText(last, x, y);
@@ -219,9 +244,10 @@ const newExpression = () => {
   const exp = convertToPostfix(tokens);
   const inputs = getInputs(variables.length);
   const outputs = getOutputs(exp, inputs);
+  const scale = getScale(exp);
 
   ctx.clearRect(0, 0, circuit.width, circuit.height);
-  createCircuit(exp, circuit.width, circuit.height / 2);
+  createCircuit(exp, circuit.width, circuit.height / 2, scale);
   createKarnaughMap(inputs, outputs, variables);
   createTruthTable(inputs, outputs, variables);
 };
