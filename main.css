@@ -27,7 +27,7 @@ header {
   font-size: 2rem;
   transition: font-size 1s;
 
-  background-color: white;
+  background-color: transparent;
 
   border: none;
   border-bottom: 1px solid #111;
@@ -60,7 +60,7 @@ header {
   font-size: 1rem;
   transition: font-size 0.5s;
 
-  background-color: white;
+  background-color: transparent;
 
   border: 1px solid #111;
   border-radius: 0px;
