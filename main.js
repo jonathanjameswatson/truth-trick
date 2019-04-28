@@ -269,4 +269,4 @@ const operator = (symbol) => {
   newExpression();
 };
 
-newExpression();
+window.onload = () => { newExpression(); };
