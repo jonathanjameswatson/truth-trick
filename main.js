@@ -36,6 +36,11 @@ const tokenize = exp => exp.replace(squeezeRegex, '').replace(replaceRegex, key 
 const strRegex = /[A-Z]+/i;
 const alphaNum = /[A-Z01]/i;
 
+const idempotentRegex = /([A-Z])+(?:∧|∨)\1/gi;
+const idempotent = exp => exp.replace(idempotentRegex, (match, p1) => p1);
+const involutionRegex = /[¬]+/gi;
+const involution = exp => exp.replace(involutionRegex, match => (match.length % 2 === 0 ? '' : '¬'));
+
 const precedence = {
   undefined: 7,
   '¬': 6,
