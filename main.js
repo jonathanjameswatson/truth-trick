@@ -201,14 +201,22 @@ const createTruthTable = (inputs, outputs, variables) => {
       const cell = row.insertCell();
       cell.appendChild(document.createTextNode(digit));
     });
+
     // Also enter the output in the Q column
     const out = row.insertCell();
     out.appendChild(document.createTextNode(outputs[i]));
+
+    // Highlights 1s on outputs
+    if (outputs[i] === '1') {
+      out.classList.add('highlighted');
+    } else {
+      out.classList.remove('highlighted');
+    }
   });
 };
 
 // Creates a karnaugh map
-const createKarnaughMap = (inputs, outputs, variables) => {
+const createKarnaughMap = (outputs, variables) => {
   const vertical = Math.floor(variables.length / 2);
   const horizontal = variables.length - vertical;
 
@@ -236,7 +244,15 @@ const createKarnaughMap = (inputs, outputs, variables) => {
     for (let j = 0; j < 2 ** horizontal; j += 1) {
       const cell = row.insertCell();
       const index = gray(i).toString(2).padStart(vertical, '0') + gray(j).toString(2).padStart(horizontal, '0');
-      cell.appendChild(document.createTextNode(outputs[parseInt(index, 2)]));
+      const digit = outputs[parseInt(index, 2)];
+      cell.appendChild(document.createTextNode(digit));
+
+      // Highlights 1s
+      if (digit === '1') {
+        cell.classList.add('highlighted');
+      } else {
+        cell.classList.remove('highlighted');
+      }
     }
   }
 };
@@ -296,7 +312,7 @@ const newExpression = () => {
 
   ctx.clearRect(0, 0, circuit.width, circuit.height);
   createCircuit(exp, circuit.width, circuit.height / 2, scale);
-  createKarnaughMap(inputs, outputs, variables);
+  createKarnaughMap(outputs, variables);
   createTruthTable(inputs, outputs, variables);
 };
 

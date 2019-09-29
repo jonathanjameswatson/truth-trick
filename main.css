@@ -111,10 +111,6 @@ th, td {
   overflow: scroll;
   text-overflow: ellipsis;
   padding-top: 0.3rem;
-
-  color: #111;
-
-  transition: all 0.5s;
 }
 
 .highlighted {
