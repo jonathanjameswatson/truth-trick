@@ -107,9 +107,19 @@ table {
 
 th, td {
   border: 1px solid #111;
-  height: 1.5rem;
+  height: 1.7rem;
   overflow: scroll;
   text-overflow: ellipsis;
+  padding-top: 0.3rem;
+
+  color: #111;
+
+  transition: all 0.5s;
+}
+
+.highlighted {
+  background-color: #111;
+  color: #fff;
 }
 
 .overline {
