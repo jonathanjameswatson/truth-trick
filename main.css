@@ -60,17 +60,21 @@ header {
   font-family: inherit;
   text-align: center;
   font-size: 1rem;
-  transition: font-size 0.5s;
 
   background-color: transparent;
+  color: #111;
 
   border: 1px solid #111;
   border-radius: 0px;
   box-shadow: none;
+
+  transition: all 0.5s;
 }
 
 .operation:hover {
   font-size: 1.2rem;
+  background-color: #111;
+  color: #fff;
 }
 
 .icon {
