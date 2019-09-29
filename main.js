@@ -1,15 +1,25 @@
+// The input element for the expression
 const expression = document.getElementById('expressionInput');
+// The table element for the truth table
 const truthTable = document.getElementById('truth-table');
+// The table element for the karnaugh map
 const karnaughMap = document.getElementById('karnaugh-map');
+// The canvas element for the circuit diagram
 const circuit = document.getElementById('diagram');
+// The context of the circuit diagram
 const ctx = circuit.getContext('2d');
+// HTML collection of all images on the page
 const { images } = document;
 
+// The canvas' width and height
 circuit.width = circuit.getBoundingClientRect().width;
 circuit.height = circuit.getBoundingClientRect().height;
+
+// The direction the text will face
 ctx.textAlign = 'right';
 ctx.textBaseline = 'middle';
 
+// What symbols or words will be converted into others
 const otherSymbols = {
   '.': '∧',
   '^': '∧',
@@ -28,14 +38,25 @@ const otherSymbols = {
   XNOR: '≡',
 };
 
+// Matches all whitespace
 const squeezeRegex = /\s+/g;
+// Matches all strings of letters, numbers or other characters
 const tokenRegex = /[A-Z]+|[01]+|\W/gi;
+// Matches all characters that must be escaped in regex
 const escapeRegex = /[-[\]{}()*+?.,\\^$|#\s]/g;
+// Matches all symbols that must be replaced
 const replaceRegex = new RegExp(Object.keys(otherSymbols).map(key => key.replace(escapeRegex, '\\$&')).join('|'), 'gi');
+
+// Returns an array of all tokens in an expression
+// First removes all whitespace and then replaces all symbols that need to be replaced
 const tokenize = exp => exp.replace(squeezeRegex, '').replace(replaceRegex, key => otherSymbols[key]).match(tokenRegex);
+
+// Matches a string of letters
 const strRegex = /[A-Z]+/i;
+// Matches a string of alphanumeric characters
 const alphaNum = /[A-Z01]/i;
 
+// Order of operations
 const precedence = {
   undefined: 7,
   '¬': 6,
@@ -47,18 +68,21 @@ const precedence = {
   '∨': 0,
 };
 
+// Dictionary of operations that take one argument
 const operations1 = {
-  '¬': a => (!a),
+  '¬': a => (!a), // NOT
 };
 
+// Dictionary of operations that take two arguments
 const operations2 = {
-  '∧': (a, b) => (a && b),
-  '∨': (a, b) => (a || b),
-  '→': (a, b) => (!a || b),
-  '⊕': (a, b) => (a ? !b : b),
-  '≡': (a, b) => (a === b),
+  '∧': (a, b) => (a && b), // AND
+  '∨': (a, b) => (a || b), // OR
+  '→': (a, b) => (!a || b), // IMPLY
+  '⊕': (a, b) => (a ? !b : b), // XOR
+  '≡': (a, b) => (a === b), // XNOR
 };
 
+// Maps ones and zeroes to true and false and vice versa
 const conversion = {
   0: false,
   1: true,
@@ -66,8 +90,11 @@ const conversion = {
   true: '1',
 };
 
+// Returns a value n_i that differs by one bit from n_(i-1)
+// gray(0) = 0, gray(1) = 1, gray(2) = 3
 const gray = i => i ^ (i >> 1);
 
+// Maps names to symbols
 const names = {
   '¬': 'NOT',
   '∧': 'AND',
@@ -77,6 +104,7 @@ const names = {
   '≡': 'XNOR',
 };
 
+// Converts infix list of tokens to postfix list of tokens
 const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
@@ -110,6 +138,7 @@ const convertToPostfix = (infix) => {
   return [postfix.concat(stack), d];
 };
 
+// Gets the width per layer
 const getScale = (depth) => {
   const scale = circuit.width / depth;
   ctx.font = `${scale * 0.1}px Courier`;
@@ -117,6 +146,7 @@ const getScale = (depth) => {
   return scale;
 };
 
+// Draws the circuit diagram
 const createCircuit = (exp, x, y, scale, direction = null) => {
   const last = exp.pop();
   if (last in operations1 || last in operations2) {
@@ -151,9 +181,11 @@ const createCircuit = (exp, x, y, scale, direction = null) => {
   }
 };
 
+// Creates a truth table
 const createTruthTable = (inputs, outputs, variables) => {
   truthTable.firstElementChild.innerHTML = '';
 
+  // Variables like A, B and Q are on the top row
   const header = truthTable.insertRow();
   variables.push('Q');
   variables.forEach((variable) => {
@@ -161,17 +193,21 @@ const createTruthTable = (inputs, outputs, variables) => {
     cell.appendChild(document.createTextNode(variable));
   });
 
+  // For each array of inputs, make a row
   inputs.forEach((input, i) => {
     const row = truthTable.insertRow();
+    // For each input, enter it into a cell
     input.forEach((digit) => {
       const cell = row.insertCell();
       cell.appendChild(document.createTextNode(digit));
     });
+    // Also enter the output in the Q column
     const out = row.insertCell();
     out.appendChild(document.createTextNode(outputs[i]));
   });
 };
 
+// Creates a karnaugh map
 const createKarnaughMap = (inputs, outputs, variables) => {
   const vertical = Math.floor(variables.length / 2);
   const horizontal = variables.length - vertical;
@@ -180,19 +216,23 @@ const createKarnaughMap = (inputs, outputs, variables) => {
 
   const header = karnaughMap.insertRow();
 
+  // Creates top left corner
   const key = header.insertCell();
   key.appendChild(document.createTextNode(`${variables.slice(0, vertical).join('')}\\${variables.slice(vertical).join('')}`));
 
+  // Creates headings for the top
   for (let i = 0; i < 2 ** horizontal; i += 1) {
     const cell = header.insertCell();
     cell.appendChild(document.createTextNode(gray(i).toString(2).padStart(horizontal, '0')));
   }
 
+  // Creates headings for the left
   for (let i = 0; i < 2 ** vertical; i += 1) {
     const row = karnaughMap.insertRow();
     const firstCell = row.insertCell();
     firstCell.appendChild(document.createTextNode(gray(i).toString(2).padStart(vertical, '0')));
 
+    // Fills in the rest of the cells
     for (let j = 0; j < 2 ** horizontal; j += 1) {
       const cell = row.insertCell();
       const index = gray(i).toString(2).padStart(vertical, '0') + gray(j).toString(2).padStart(horizontal, '0');
@@ -201,6 +241,7 @@ const createKarnaughMap = (inputs, outputs, variables) => {
   }
 };
 
+// Evaluates a postfix expression
 const evaluate = (exp) => {
   const last = exp.pop();
   if (last in operations1) {
@@ -215,6 +256,7 @@ const evaluate = (exp) => {
   return last;
 };
 
+// Gets all inputs to the expression
 const getInputs = (length) => {
   const inputs = [];
   for (let i = 0; i < 2 ** length; i += 1) {
@@ -224,6 +266,7 @@ const getInputs = (length) => {
   return inputs;
 };
 
+// Gets all outputs from inputs to the expression
 const getOutputs = (exp, inputs) => {
   const outputs = [];
   inputs.forEach((input) => {
@@ -242,6 +285,7 @@ const getOutputs = (exp, inputs) => {
   return outputs;
 };
 
+// This runs whenever the expression is changed
 const newExpression = () => {
   const tokens = tokenize(expression.value);
   const variables = [...new Set(tokens.filter(token => strRegex.test(token)))];
@@ -256,6 +300,7 @@ const newExpression = () => {
   createTruthTable(inputs, outputs, variables);
 };
 
+// This runs whenever an operator button is clicked
 const operator = (symbol) => {
   const start = expression.selectionStart;
   const before = expression.value.substring(0, start);
@@ -269,4 +314,5 @@ const operator = (symbol) => {
   newExpression();
 };
 
+// Do newExpression once the page has loaded
 window.onload = () => { newExpression(); };
