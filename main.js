@@ -197,7 +197,9 @@ const createTruthTable = (inputs, outputs, variables) => {
   variables.push('Q');
   variables.forEach((variable) => {
     const cell = header.insertCell();
-    cell.appendChild(document.createTextNode(variable));
+    const div = cell.appendChild(document.createElement('div'));
+    div.classList.add('overflow');
+    div.appendChild(document.createTextNode(variable));
   });
 
   // For each array of inputs, make a row
@@ -206,12 +208,16 @@ const createTruthTable = (inputs, outputs, variables) => {
     // For each input, enter it into a cell
     input.forEach((digit) => {
       const cell = row.insertCell();
-      cell.appendChild(document.createTextNode(digit));
+      const div = cell.appendChild(document.createElement('div'));
+      div.classList.add('overflow');
+      div.appendChild(document.createTextNode(digit));
     });
 
     // Also enter the output in the Q column
     const out = row.insertCell();
-    out.appendChild(document.createTextNode(outputs[i]));
+    const outDiv = out.appendChild(document.createElement('div'));
+    outDiv.classList.add('overflow');
+    outDiv.appendChild(document.createTextNode(outputs[i]));
 
     // Highlights 1s on outputs
     if (outputs[i] === '1') {
@@ -233,26 +239,35 @@ const createKarnaughMap = (outputs, variables) => {
 
   // Creates top left corner
   const key = header.insertCell();
-  key.appendChild(document.createTextNode(`${variables.slice(0, vertical).join('')}\\${variables.slice(vertical).join('')}`));
+  const keyDiv = key.appendChild(document.createElement('div'));
+  keyDiv.classList.add('overflow');
+  const keyText = `${variables.slice(0, vertical).join('')}\\${variables.slice(vertical).join('')}`;
+  keyDiv.appendChild(document.createTextNode(keyText));
 
   // Creates headings for the top
   for (let i = 0; i < 2 ** horizontal; i += 1) {
     const cell = header.insertCell();
-    cell.appendChild(document.createTextNode(gray(i).toString(2).padStart(horizontal, '0')));
+    const div = cell.appendChild(document.createElement('div'));
+    div.classList.add('overflow');
+    div.appendChild(document.createTextNode(gray(i).toString(2).padStart(horizontal, '0')));
   }
 
   // Creates headings for the left
   for (let i = 0; i < 2 ** vertical; i += 1) {
     const row = karnaughMap.insertRow();
     const firstCell = row.insertCell();
-    firstCell.appendChild(document.createTextNode(gray(i).toString(2).padStart(vertical, '0')));
+    const firstDiv = firstCell.appendChild(document.createElement('div'));
+    firstDiv.classList.add('overflow');
+    firstDiv.appendChild(document.createTextNode(gray(i).toString(2).padStart(vertical, '0')));
 
     // Fills in the rest of the cells
     for (let j = 0; j < 2 ** horizontal; j += 1) {
-      const cell = row.insertCell();
       const index = gray(i).toString(2).padStart(vertical, '0') + gray(j).toString(2).padStart(horizontal, '0');
       const digit = outputs[parseInt(index, 2)];
-      cell.appendChild(document.createTextNode(digit));
+      const cell = row.insertCell();
+      const div = cell.appendChild(document.createElement('div'));
+      div.classList.add('overflow');
+      div.appendChild(document.createTextNode(digit));
 
       // Highlights 1s
       if (digit === '1') {
