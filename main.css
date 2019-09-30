@@ -86,11 +86,9 @@ a {
   margin: auto 1rem;
 }
 
-canvas {
+#diagram {
   width: 50rem;
   max-width: 100%;
-  height: calc(50vw - 1rem);
-  max-height: 25rem;
 
   border: 1px solid #111;
 }
@@ -125,4 +123,22 @@ th, td {
 .gate {
   width: 0;
   height: 0;
+}
+
+.node rect {
+  fill: #fff;
+  color: #000;
+  stroke-width: 1px;
+}
+
+.node polygon {
+  fill: rgba(255, 255, 255, 0);
+  stroke: #f00;
+  stroke-width: 0px;
+}
+
+.edgePath path.path {
+  stroke: #000;
+  fill: none;
+  stroke-width: 4.5px;
 }
