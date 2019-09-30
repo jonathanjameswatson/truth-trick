@@ -4,20 +4,9 @@ const expression = document.getElementById('expressionInput');
 const truthTable = document.getElementById('truth-table');
 // The table element for the karnaugh map
 const karnaughMap = document.getElementById('karnaugh-map');
-// The canvas element for the circuit diagram
-const circuit = document.getElementById('diagram');
-// The context of the circuit diagram
-const ctx = circuit.getContext('2d');
-// HTML collection of all images on the page
-const { images } = document;
 
-// The canvas' width and height
-circuit.width = circuit.getBoundingClientRect().width;
-circuit.height = circuit.getBoundingClientRect().height;
-
-// The direction the text will face
-ctx.textAlign = 'right';
-ctx.textBaseline = 'middle';
+// Create the renderer
+const render = new dagreD3.render();
 
 // What symbols or words will be converted into others
 const otherSymbols = {
@@ -108,7 +97,6 @@ const names = {
 const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
-  let d = 0;
 
   infix.forEach((token) => {
     if (alphaNum.test(token)) {
@@ -125,7 +113,6 @@ const convertToPostfix = (infix) => {
       stack.push(token);
     } else {
       let top = stack.length.length - 1;
-      d = Math.max(d, stack.length + 1);
       while (precedence[top] <= precedence[token]) {
         postfix.push(pop(stack));
         top += 1;
@@ -133,51 +120,71 @@ const convertToPostfix = (infix) => {
       stack.push(token);
     }
   });
-  d = Math.max(d, stack.length);
   stack.reverse();
-  return [postfix.concat(stack), d];
+  return postfix.concat(stack);
 };
 
-// Gets the width per layer
-const getScale = (depth) => {
-  const scale = circuit.width / depth;
-  ctx.font = `${scale * 0.1}px Courier`;
-  ctx.lineWidth = scale * 0.02;
-  return scale;
+const svg = d3.select('svg');
+const inner = svg.select('g');
+
+// Set up zoom support
+const zoom = d3.zoom()
+  .on('zoom', () => {
+    inner.attr('transform', d3.event.transform);
+  });
+svg.call(zoom);
+
+render.shapes().gate = (parent, bbox, node) => {
+  const w = bbox.width;
+  const h = bbox.height;
+  const points = [
+    { x: w * 0.05, y: -h * 0.3 },
+    { x: w * 0.95, y: -h / 2 },
+    { x: w * 0.05, y: -h * 0.7 },
+  ];
+
+  const shapeSvg = parent.insert('polygon', ':first-child')
+    .attr('points', points.map(d => `${d.x},${d.y}`).join(' '))
+    .attr('transform', `translate(${-w / 2},${h * 0.5})`);
+
+  parent.insert('image')
+    .attr('class', 'nodeImage')
+    .attr('xlink:href', () => `images/gates/${node.gate}.svg`)
+    .attr('x', -w / 2)
+    .attr('y', -h / 2)
+    .attr('width', w)
+    .attr('height', h);
+
+  node.intersect = point => dagreD3.intersect.polygon(node, points, point);
+
+  return shapeSvg;
 };
 
 // Draws the circuit diagram
-const createCircuit = (exp, x, y, scale, direction = null) => {
+const createCircuit = (g, exp, direction = 0, parentNode = null, node = '0') => {
   const last = exp.pop();
   if (last in operations1 || last in operations2) {
-    let offset = 0;
-    if (direction === 'down') {
-      offset = scale * -0.15;
-      ctx.beginPath();
-      ctx.moveTo(x, y + scale * 0.16);
-      ctx.lineTo(x, y - scale * 0.01);
-      ctx.stroke();
-    } else if (direction === 'up') {
-      offset = scale * 0.15;
-      ctx.beginPath();
-      ctx.moveTo(x, y - scale * 0.16);
-      ctx.lineTo(x, y + scale * 0.01);
-      ctx.stroke();
-    }
-    ctx.drawImage(Array.from(images).find(image => image.id === names[last]),
-      x - scale * 0.95, y - scale * 0.25 - offset, scale, scale * 0.5);
+    g.setNode(node, {
+      shape: 'gate',
+      label: '',
+      width: 180,
+      height: 90,
+      direction,
+      gate: names[last],
+    });
+
     if (last in operations1) {
-      if (direction === 'down') {
-        createCircuit(exp, x - scale * 0.9, y + scale * 0.3 + offset, scale, 'down');
-      } else {
-        createCircuit(exp, x - scale * 0.9, y - scale * 0.3 + offset, scale, 'up');
-      }
+      createCircuit(g, exp, 0, node, `${node}0`);
     } else {
-      createCircuit(exp, x - scale * 0.9, y + scale * 0.1 - offset, scale, 'down');
-      createCircuit(exp, x - scale * 0.9, y - scale * 0.1 - offset, scale, 'up');
+      createCircuit(g, exp, -1, node, `${node}0`);
+      createCircuit(g, exp, 1, node, `${node}1`);
     }
   } else {
-    ctx.fillText(last, x - scale * 0.01, y);
+    g.setNode(node, { label: last, direction });
+  }
+
+  if (parentNode !== null) {
+    g.setEdge(parentNode, node, { arrowhead: 'undirected' });
   }
 };
 
@@ -305,15 +312,31 @@ const getOutputs = (exp, inputs) => {
 const newExpression = () => {
   const tokens = tokenize(expression.value);
   const variables = [...new Set(tokens.filter(token => strRegex.test(token)))];
-  const [exp, depth] = convertToPostfix(tokens);
+  const exp = convertToPostfix(tokens);
   const inputs = getInputs(variables.length);
   const outputs = getOutputs(exp, inputs);
-  const scale = getScale(depth);
 
-  ctx.clearRect(0, 0, circuit.width, circuit.height);
-  createCircuit(exp, circuit.width, circuit.height / 2, scale);
+  inner.selectAll('*').remove();
+
+  // Create a new directed graph
+  const g = new dagreD3.graphlib.Graph().setGraph({ rankdir: 'RL' });
+
+  createCircuit(g, exp);
   createKarnaughMap(outputs, variables);
   createTruthTable(inputs, outputs, variables);
+
+  // Run the renderer. This is what draws the final graph.
+  render(inner, g);
+
+  // Get graph width
+  const graphWidth = g.graph().width + 40;
+  // Get SVG width
+  const width = parseInt(svg.style('width').replace(/px/, ''), 10);
+
+  svg.call(zoom.transform, d3.zoomIdentity
+    .translate((width - graphWidth * (width / graphWidth)) / 2, 20)
+    .scale(width / graphWidth));
+  svg.attr('height', g.graph().height * (width / graphWidth) + 40);
 };
 
 // This runs whenever an operator button is clicked
