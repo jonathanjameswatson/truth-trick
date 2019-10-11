@@ -1,0 +1,9 @@
+{
+  "name": "truth-trick",
+  "version": "1.0.0",
+  "description": "A boolean expression visualiser",
+  "main": "index.js",
+  "repository": "https://github.com/jonathanjameswatson/truth-trick.git",
+  "author": "Jonathan Watson <jonathanw12@outlook.com>",
+  "license": "MIT"
+}
