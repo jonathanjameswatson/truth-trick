@@ -139,7 +139,9 @@ render.shapes().gate = (parent, bbox, node) => {
   const h = bbox.height;
   const points = [
     { x: w * 0.05, y: -h * 0.3 },
+    { x: w * 0.3, y: -h * 0.1 },
     { x: w * 0.95, y: -h / 2 },
+    { x: w * 0.3, y: -h * 0.9 },
     { x: w * 0.05, y: -h * 0.7 },
   ];
 
@@ -334,7 +336,7 @@ const newExpression = () => {
   inner.selectAll('*').remove();
 
   // Create a new directed graph
-  const g = new dagreD3.graphlib.Graph().setGraph({ rankdir: 'RL' });
+  const g = new dagreD3.graphlib.Graph().setGraph({ rankdir: 'RL', nodeSep: 20 });
 
   createCircuit(g, exp);
   createKarnaughMap(outputs, variables);

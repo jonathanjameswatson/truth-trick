@@ -294,7 +294,7 @@ function makeFragmentRef(url, fragmentId) {
 function calcPoints(g, e) {
   const tail = g.node(e.v);
   const head = g.node(e.w);
-  const startPoint = { x: tail.x - (tail.width * 0.49), y: tail.y + tail.height * 0.5 * head.direction }
+  const startPoint = { x: tail.x - (tail.width * 0.49), y: tail.y + tail.height * 0.25 * head.direction }
   const endPoint = { x: head.x + (head.width * 0.49), y: head.y }
   return diagonal(startPoint, endPoint)
 }
