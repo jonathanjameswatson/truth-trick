@@ -43,13 +43,19 @@ const otherSymbols = {
   '|': '∨',
   OR: '∨',
   '!': '¬',
-  NOT: '∨',
+  NOT: '¬',
   '⊻': '⊕',
-  XOR: '∨',
+  XOR: '⊕',
+  EOR: '⊕',
+  EXOR: '⊕',
   '>': '→',
+  IMPLY: '→',
   '=': '≡',
   '⊙': '≡',
   XNOR: '≡',
+  ENOR: '≡',
+  EXNOR: '≡',
+  NXOR: '≡',
 };
 
 // Matches all whitespace
