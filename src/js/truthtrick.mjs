@@ -8,20 +8,6 @@ import OR from '../images/gates/OR.svg';
 import XNOR from '../images/gates/XNOR.svg';
 import XOR from '../images/gates/XOR.svg';
 
-/* dagreD3.prototype.calcPoints = (g, e) => {
-  const tail = g.node(e.v);
-  const head = g.node(e.w);
-  const start = {
-    x: tail.x - (tail.width * 0.49),
-    y: tail.y + tail.height * 0.25 * head.direction,
-  };
-  const end = { x: head.x + (head.width * 0.49), y: head.y };
-  return `M ${start.x} ${start.y}
-  C ${(start.x + end.x) / 2} ${start.y},
-    ${(start.x + end.x) / 2} ${end.y},
-    ${end.x} ${end.y}`;
-}; */
-
 // Order of operations
 const sprites = {
   AND,
