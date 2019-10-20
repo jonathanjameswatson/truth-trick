@@ -29,37 +29,54 @@
 <body>
   <header>
     <h1>Truth Trick</h1>
-
-    <input type="text" value="(A∧B)∨¬C" class="expression" id="expressionInput"></input>
-
-    <div class="button-container">
-      <input type="button" value="∧" class="operation" title="AND"></input>
-      <input type="button" value="∨" class="operation" title="OR"></input>
-      <input type="button" value="¬" class="operation" title="NOT"></input>
-      <input type="button" value="→" class="operation" title="IMPLY"></input>
-      <input type="button" value="⊕" class="operation" title="XOR"></input>
-      <input type="button" value="≡" class="operation" title="XNOR"></input>
-    </div>
   </header>
 
-  <h2>Logic circuit</h2>
-  <svg id="diagram">
-    <g></g>
-  </svg>
+  <main>
+    <input
+      type="text"
+      value="(A∧B)∨¬C"
+      id="expressionInput"
+      class="expression"
+      name="expression"
+      placeholder="Enter boolean expression here"
+    >
+    </input>
 
-  <h2>Truth table</h2>
-  <table id="truth-table">
-    <tr>
-      <th>LOADING</th>
-    </tr>
-  </table>
+    <div class="button-container">
+      <button type="button" class="operation" title="AND">∧</button>
+      <button type="button" class="operation" title="OR">∨</button>
+      <button type="button" class="operation" title="NOT">¬</button>
+      <button type="button" class="operation" title="IMPLY">→</button>
+      <button type="button" class="operation" title="XOR">⊕</button>
+      <button type="button" class="operation" title="XNOR">≡</button>
+    </div>
 
-  <h2>Karnaugh Map</h2>
-  <table id="karnaugh-map">
-    <tr>
-      <th>LOADING</th>
-    </tr>
-  </table>
+    <section>
+      <h2>Logic circuit</h2>
+      <svg id="diagram" role="img">
+        <title id="diagram-title">Logic circuit diagram</title>
+        <g></g>
+      </svg>
+    </section>
+
+    <section>
+      <h2>Truth table</h2>
+      <table id="truth-table">
+        <tr>
+          <th>LOADING</th>
+        </tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Karnaugh Map</h2>
+      <table id="karnaugh-map">
+        <tr>
+          <th>LOADING</th>
+        </tr>
+      </table>
+    </section>
+  </main>
 
   <footer>
     <div class="button-container overline">

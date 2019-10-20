@@ -386,7 +386,8 @@ const newExpression = () => {
 };
 
 // This runs whenever an operator button is clicked
-const operator = (symbol) => {
+const operator = (elem) => {
+  const symbol = elem.textContent || elem.innerText;
   const start = expression.selectionStart;
   const before = expression.value.substring(0, start);
   const after = expression.value.substring(expression.selectionEnd, expression.value.length);
@@ -404,4 +405,4 @@ window.onload = () => { newExpression(); };
 
 expression.addEventListener('input', () => { newExpression(); });
 Array.from(operationButtons)
-  .forEach(operation => operation.addEventListener('click', () => { operator(operation.value); }));
+  .forEach(operation => operation.addEventListener('click', () => { operator(operation); }));
