@@ -8,12 +8,23 @@
   <meta name="description" content="Boolean expression visualiser and simplifier">
   <meta name="author" content="jonathanjameswatson">
 
-  <link rel="stylesheet" href="normalize.css">
-  <link href="https://fonts.googleapis.com/css?family=Overpass+Mono" rel="stylesheet">
+  <!-- Schema.org for Google -->
+  <meta itemprop="name" content="Truth Trick">
+  <meta itemprop="description" content="Boolean expression visualiser">
+  <meta itemprop="image" content="https://jonathanjameswatson.github.io/img/truthtrick.png">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Truth Trick">
+  <meta name="twitter:description" content="Boolean expression visualiser">
+  <meta name="twitter:image:src" content="https://jonathanjameswatson.github.io/img/truthtrick.png">
+  <!-- Open Graph general (Facebook, Pinterest & Google+) -->
+  <meta name="og:title" content="Truth Trick">
+  <meta name="og:description" content="Boolean expression visualiser">
+  <meta name="og:image" content="https://jonathanjameswatson.github.io/img/truthtrick.png">
+  <meta name="og:url" content="https://jonathanjameswatson.github.io/truth-trick/">
+  <meta name="og:site_name" content="Truth Trick">
+  <meta name="og:type" content="website">
 
-  <link rel="stylesheet" href="main.css">
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js"></script>
   <script src="dagre-d3.js"></script>
 </head>
 
@@ -21,15 +32,15 @@
   <header>
     <h1>Truth Trick</h1>
 
-    <input type="text" value="(A∧B)∨¬C" class="expression" id="expressionInput" oninput="newExpression()"></input>
+    <input type="text" value="(A∧B)∨¬C" class="expression" id="expressionInput"></input>
 
     <div class="button-container">
-      <input type="button" value="∧" class="operation" onclick="operator('∧')" title="AND"></input>
-      <input type="button" value="∨" class="operation" onclick="operator('∨')" title="OR"></input>
-      <input type="button" value="¬" class="operation" onclick="operator('¬')" title="NOT"></input>
-      <input type="button" value="→" class="operation" onclick="operator('→')" title="IMPLY"></input>
-      <input type="button" value="⊕" class="operation" onclick="operator('⊕')" title="XOR"></input>
-      <input type="button" value="≡" class="operation" onclick="operator('≡')" title="XNOR"></input>
+      <input type="button" value="∧" class="operation" title="AND"></input>
+      <input type="button" value="∨" class="operation" title="OR"></input>
+      <input type="button" value="¬" class="operation" title="NOT"></input>
+      <input type="button" value="→" class="operation" title="IMPLY"></input>
+      <input type="button" value="⊕" class="operation" title="XOR"></input>
+      <input type="button" value="≡" class="operation" title="XNOR"></input>
     </div>
   </header>
 
@@ -55,12 +66,12 @@
   <footer>
     <div class="button-container overline">
       <a href="https://github.com/jonathanjameswatson/truth-trick">
-        <img src="images/gitHub.png" alt="GitHub" class="icon">
+        <svg alt="GitHub" class="icon">
+          <use href="<%= require('./images/github.svg').url %>" />
+        </svg>
       </a>
       <p>Jonathan J Watson</p>
     </div>
   </footer>
-
-  <script src="main.js"></script>
 </body>
 </html>

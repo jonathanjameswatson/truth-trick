@@ -1,2 +1,3 @@
 # Truth Trick
-Boolean expression visualiser and simplifier
+
+Boolean expression visualiser

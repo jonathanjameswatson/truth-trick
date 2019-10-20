@@ -104,3 +104,6 @@ public
 
 # Development
 .vscode
+
+# Dist
+dist

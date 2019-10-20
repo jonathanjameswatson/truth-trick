@@ -21,7 +21,8 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-module.exports =  {
+
+module.exports = {
   graphlib: require("./lib/graphlib"),
   dagre: require("./lib/dagre"),
   intersect: require("./lib/intersect"),
