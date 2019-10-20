@@ -1,9 +1,48 @@
+import d3 from 'd3';
+import dagreD3 from './dagre-d3.js';
+
+import AND from '../images/gates/AND.svg';
+import IMPLY from '../images/gates/IMPLY.svg';
+import NOT from '../images/gates/NOT.svg';
+import OR from '../images/gates/OR.svg';
+import XNOR from '../images/gates/XNOR.svg';
+import XOR from '../images/gates/XOR.svg';
+
+/* dagreD3.prototype.calcPoints = (g, e) => {
+  const tail = g.node(e.v);
+  const head = g.node(e.w);
+  const start = {
+    x: tail.x - (tail.width * 0.49),
+    y: tail.y + tail.height * 0.25 * head.direction,
+  };
+  const end = { x: head.x + (head.width * 0.49), y: head.y };
+  return `M ${start.x} ${start.y}
+  C ${(start.x + end.x) / 2} ${start.y},
+    ${(start.x + end.x) / 2} ${end.y},
+    ${end.x} ${end.y}`;
+}; */
+
+// Order of operations
+const sprites = {
+  AND,
+  IMPLY,
+  NOT,
+  OR,
+  XNOR,
+  XOR,
+};
+
 // The input element for the expression
 const expression = document.getElementById('expressionInput');
 // The table element for the truth table
 const truthTable = document.getElementById('truth-table');
 // The table element for the karnaugh map
 const karnaughMap = document.getElementById('karnaugh-map');
+// The list of operator buttons
+const operationButtons = document.getElementsByClassName('operation');
+
+const svg = d3.select('#diagram');
+const inner = svg.select('g');
 
 // Create the renderer
 const render = new dagreD3.render();
@@ -124,9 +163,6 @@ const convertToPostfix = (infix) => {
   return postfix.concat(stack);
 };
 
-const svg = d3.select('svg');
-const inner = svg.select('g');
-
 // Set up zoom support
 const zoom = d3.zoom()
   .on('zoom', () => {
@@ -149,13 +185,14 @@ render.shapes().gate = (parent, bbox, node) => {
     .attr('points', points.map(d => `${d.x},${d.y}`).join(' '))
     .attr('transform', `translate(${-w / 2},${h * 0.5})`);
 
-  parent.insert('image')
+  parent.insert('svg')
     .attr('class', 'nodeImage')
-    .attr('xlink:href', () => `images/gates/${node.gate}.svg`)
     .attr('x', -w / 2)
     .attr('y', -h / 2)
     .attr('width', w)
-    .attr('height', h);
+    .attr('height', h)
+    .insert('use')
+    .attr('href', sprites[node.gate].url);
 
   node.intersect = point => dagreD3.intersect.polygon(node, points, point);
 
@@ -372,3 +409,7 @@ const operator = (symbol) => {
 
 // Do newExpression once the page has loaded
 window.onload = () => { newExpression(); };
+
+expression.addEventListener('input', () => { newExpression(); });
+Array.from(operationButtons)
+  .forEach(operation => operation.addEventListener('click', () => { operator(operation.value); }));

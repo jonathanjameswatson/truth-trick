@@ -1,14 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Overpass+Mono&display=swap');
+
 html {
   padding: 0px;
-
-  color: #111;
-  font-family: 'Overpass Mono', monospace;
-  text-align: center;
 }
 
 body {
   padding: 0px;
   margin: 1rem;
+
+  color: #111;
+  font-family: 'Overpass Mono', monospace;
+  text-align: center;
 }
 
 header {
@@ -143,5 +145,5 @@ th, td {
 .edgePath path.path {
   stroke: #000;
   fill: none;
-  stroke-width: 4.5px;
+  stroke-width: 4px;
 }

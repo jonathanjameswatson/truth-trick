@@ -21,7 +21,8 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-module.exports =  {
+
+module.exports = {
   graphlib: require("./lib/graphlib"),
   dagre: require("./lib/dagre"),
   intersect: require("./lib/intersect"),
@@ -294,8 +295,8 @@ function makeFragmentRef(url, fragmentId) {
 function calcPoints(g, e) {
   const tail = g.node(e.v);
   const head = g.node(e.w);
-  const startPoint = { x: tail.x - (tail.width * 0.49), y: tail.y + tail.height * 0.25 * head.direction }
-  const endPoint = { x: head.x + (head.width * 0.49), y: head.y }
+  const startPoint = { x: tail.x - (tail.width * 0.495), y: tail.y + tail.height * 0.2275 * head.direction }
+  const endPoint = { x: head.x + (head.width * 0.495), y: head.y }
   return diagonal(startPoint, endPoint)
 }
 
