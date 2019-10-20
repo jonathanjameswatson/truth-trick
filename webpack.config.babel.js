@@ -9,7 +9,6 @@ import SpriteLoaderPlugin from 'svg-sprite-loader/plugin';
 
 export default {
   entry: './src/js/main.mjs',
-  devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist/'),
     filename: '[name].[hash].mjs',
