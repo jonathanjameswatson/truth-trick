@@ -403,6 +403,6 @@ const operator = (elem) => {
 // Do newExpression once the page has loaded
 window.onload = () => { newExpression(); };
 
-expression.addEventListener('input', () => { newExpression(); });
+expression.addEventListener('input', () => { newExpression(); }, { passive: true });
 Array.from(operationButtons)
-  .forEach(operation => operation.addEventListener('click', () => { operator(operation); }));
+  .forEach(operation => operation.addEventListener('click', () => { operator(operation); }, { passive: true }));
