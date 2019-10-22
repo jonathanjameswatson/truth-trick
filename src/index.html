@@ -34,15 +34,11 @@
   </header>
 
   <main>
-    <input
-      type="text"
-      value="(A∧B)∨¬C"
-      id="expressionInput"
-      class="expression"
-      name="expression"
-      placeholder="Enter boolean expression here"
-    >
-    </input>
+    <label>
+      Enter boolean expression below
+      <input type="text" value="(A∧B)∨¬C" id="expressionInput" class="expression" name="expression">
+      </input>
+    </label>
 
     <div class="button-container">
       <button type="button" class="operation" title="AND">∧</button>
@@ -82,7 +78,7 @@
 
   <footer>
     <div class="button-container overline">
-      <a href="https://github.com/jonathanjameswatson/truth-trick">
+      <a href="https://github.com/jonathanjameswatson/truth-trick" aria-label="GitHub">
         <svg alt="GitHub" class="icon">
           <use href="<%= require('./images/github.svg').url %>" />
         </svg>
