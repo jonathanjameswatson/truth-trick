@@ -96,8 +96,8 @@ a {
 }
 
 table {
-  width: 50rem;
-  max-width: 100%;
+  width: 100%;
+  max-width: 50rem;
   table-layout: fixed;
   margin: 1rem auto;
 
