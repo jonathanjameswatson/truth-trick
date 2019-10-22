@@ -1,3 +1,5 @@
 # Truth Trick
 
-Boolean expression visualiser
+> Boolean expression visualiser
+
+![GIF demo](demo.gif)
