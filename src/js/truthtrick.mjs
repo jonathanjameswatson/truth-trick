@@ -79,13 +79,13 @@ const alphaNum = /[A-Z01]/i;
 // Order of operations
 const precedence = {
   undefined: 7,
-  '¬': 6,
-  '(': 5,
-  '→': 4,
-  '⊕': 3,
-  '≡': 2,
-  '∧': 1,
-  '∨': 0,
+  '(': 6,
+  '→': 5,
+  '⊕': 4,
+  '≡': 3,
+  '∧': 2,
+  '∨': 1,
+  '¬': 0,
 };
 
 // Dictionary of operations that take one argument
@@ -128,8 +128,9 @@ const names = {
 const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
-
+  // (¬A∧¬B)∨¬C
   infix.forEach((token) => {
+    console.log(token)
     if (alphaNum.test(token)) {
       postfix.push(token);
     } else if (token === '(') {
@@ -143,13 +144,17 @@ const convertToPostfix = (infix) => {
     } else if (stack.length === 0) {
       stack.push(token);
     } else {
-      let top = stack.length.length - 1;
+      let top = stack[stack.length - 1];
+      console.log(`top = ${top}`)
       while (precedence[top] <= precedence[token]) {
-        postfix.push(pop(stack));
-        top += 1;
+        postfix.push(stack.pop());
+        top = stack[stack.length - 1];
       }
       stack.push(token);
     }
+    console.log(JSON.stringify(postfix))
+    console.log(JSON.stringify(stack))
+    console.log('---------')
   });
   stack.reverse();
   return postfix.concat(stack);
