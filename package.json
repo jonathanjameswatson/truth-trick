@@ -16,7 +16,7 @@
     "@babel/register": "^7.6.2",
     "babel-loader": "^8.0.6",
     "clean-css-loader": "^2.0.0",
-    "css-loader": "^3.2.0",
+    "css-loader": "^3.4.0",
     "extract-css-chunks-webpack-plugin": "^4.6.0",
     "file-loader": "^4.2.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
