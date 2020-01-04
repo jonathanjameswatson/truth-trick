@@ -8,7 +8,7 @@ import OR from '../images/gates/OR.svg';
 import XNOR from '../images/gates/XNOR.svg';
 import XOR from '../images/gates/XOR.svg';
 
-// Order of operations
+// SVGs of gates
 const sprites = {
   AND,
   IMPLY,
@@ -50,12 +50,15 @@ const otherSymbols = {
   EXOR: '⊕',
   '>': '→',
   IMPLY: '→',
+  IMPLIES: '→',
   '=': '≡',
   '⊙': '≡',
   XNOR: '≡',
   ENOR: '≡',
   EXNOR: '≡',
   NXOR: '≡',
+  EQUIVALENT: '≡',
+  BICONDITIONAL: '≡',
 };
 
 // Matches all whitespace
@@ -81,10 +84,10 @@ const precedence = {
   undefined: 7,
   '(': 6,
   '→': 5,
-  '⊕': 4,
-  '≡': 3,
-  '∧': 2,
-  '∨': 1,
+  '≡': 4,
+  '∨': 3,
+  '⊕': 2,
+  '∧': 1,
   '¬': 0,
 };
 
@@ -128,9 +131,7 @@ const names = {
 const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
-  // (¬A∧¬B)∨¬C
   infix.forEach((token) => {
-    console.log(token)
     if (alphaNum.test(token)) {
       postfix.push(token);
     } else if (token === '(') {
@@ -145,16 +146,12 @@ const convertToPostfix = (infix) => {
       stack.push(token);
     } else {
       let top = stack[stack.length - 1];
-      console.log(`top = ${top}`)
       while (precedence[top] <= precedence[token]) {
         postfix.push(stack.pop());
         top = stack[stack.length - 1];
       }
       stack.push(token);
     }
-    console.log(JSON.stringify(postfix))
-    console.log(JSON.stringify(stack))
-    console.log('---------')
   });
   stack.reverse();
   return postfix.concat(stack);
