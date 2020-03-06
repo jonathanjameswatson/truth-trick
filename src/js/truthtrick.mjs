@@ -8,6 +8,8 @@ import OR from '../images/gates/OR.svg';
 import XNOR from '../images/gates/XNOR.svg';
 import XOR from '../images/gates/XOR.svg';
 
+const { render: Render, graphlib } = dagreD3;
+
 // SVGs of gates
 const sprites = {
   AND,
@@ -31,7 +33,7 @@ const svg = d3.select('#diagram');
 const inner = svg.select('g');
 
 // Create the renderer
-const render = new dagreD3.render();
+const render = new Render();
 
 // What symbols or words will be converted into others
 const otherSymbols = {
@@ -115,7 +117,7 @@ const conversion = {
 
 // Returns a value n_i that differs by one bit from n_(i-1)
 // gray(0) = 0, gray(1) = 1, gray(2) = 3
-const gray = i => i ^ (i >> 1);
+const gray = i => i ^ (i >> 1); // eslint-disable-line no-bitwise
 
 // Maps names to symbols
 const names = {
@@ -187,8 +189,6 @@ render.shapes().gate = (parent, bbox, node) => {
     .attr('height', h)
     .insert('use')
     .attr('href', sprites[node.gate].url);
-
-  node.intersect = point => dagreD3.intersect.polygon(node, points, point);
 
   return shapeSvg;
 };
@@ -367,7 +367,7 @@ const newExpression = () => {
   inner.selectAll('*').remove();
 
   // Create a new directed graph
-  const g = new dagreD3.graphlib.Graph().setGraph({ rankdir: 'RL', nodeSep: 20 });
+  const g = new graphlib.Graph().setGraph({ rankdir: 'RL', nodeSep: 20 });
 
   createCircuit(g, exp);
   createKarnaughMap(outputs, variables);
