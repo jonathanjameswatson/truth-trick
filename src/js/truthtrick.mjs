@@ -1,5 +1,5 @@
 import d3 from 'd3';
-import dagreD3 from './dagre-d3.js';
+import dagreD3 from './dagre-d3.min.js';
 
 import AND from '../images/gates/AND.svg';
 import IMPLY from '../images/gates/IMPLY.svg';
