@@ -14,6 +14,9 @@ export default {
     filename: '[name].[hash].mjs',
     chunkFilename: '[name].[chunkhash].chunk.mjs',
   },
+  devServer: {
+    contentBase: './dist',
+  },
   optimization: {
     minimize: true,
     minimizer: [
