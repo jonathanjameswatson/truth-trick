@@ -64,7 +64,7 @@ header {
   font-size: 1rem;
 
   background-color: transparent;
-  color: #111;
+  color: inherit;
 
   border: 1px solid #111;
   border-radius: 0px;
@@ -86,6 +86,7 @@ header {
 
 a {
   margin: auto 1rem;
+  color: inherit;
 }
 
 #diagram {
@@ -131,13 +132,13 @@ th, td {
 }
 
 .node rect {
-  fill: #fff;
+  fill: #ffffff00;
   color: #000;
   stroke-width: 1px;
 }
 
 .node polygon {
-  fill: rgba(255, 255, 255, 0);
+  fill: #ffffff00;
   stroke: #f00;
   stroke-width: 0px;
 }
