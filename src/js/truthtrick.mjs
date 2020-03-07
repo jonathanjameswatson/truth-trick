@@ -136,7 +136,16 @@ const names = {
 const convertToPostfix = (infix) => {
   const postfix = [];
   const stack = [];
-  infix.forEach((token) => {
+  const reverse = infix.reverse().map((token) => {
+    if (token === '(') {
+      return ')';
+    }
+    if (token === ')') {
+      return '(';
+    }
+    return token;
+  });
+  reverse.forEach((token) => {
     if (alphaNum.test(token)) {
       postfix.push(token);
     } else if (token === '(') {
@@ -342,11 +351,11 @@ const getOutputs = (exp, inputs) => {
   const outputs = [];
   inputs.forEach((input) => {
     let replacedExp = exp;
-    let n = -1;
+    let n = 0;
     replacedExp = replacedExp.map((token) => {
       if (strRegex.test(token)) {
         n += 1;
-        return input[n];
+        return input[input.length - n];
       }
       return token;
     });
