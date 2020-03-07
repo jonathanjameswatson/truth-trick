@@ -35,6 +35,9 @@ const inner = svg.select('g');
 // Create the renderer
 const render = new Render();
 
+// The graph to be rendered
+let g;
+
 // What symbols or words will be converted into others
 const otherSymbols = {
   '.': '∧',
@@ -159,13 +162,6 @@ const convertToPostfix = (infix) => {
   return postfix.concat(stack);
 };
 
-// Set up zoom support
-const zoom = d3.zoom()
-  .on('zoom', () => {
-    inner.attr('transform', d3.event.transform);
-  });
-svg.call(zoom);
-
 render.shapes().gate = (parent, bbox, node) => {
   const w = bbox.width;
   const h = bbox.height;
@@ -194,7 +190,7 @@ render.shapes().gate = (parent, bbox, node) => {
 };
 
 // Draws the circuit diagram
-const createCircuit = (g, exp, direction = 0, parentNode = null, node = '0') => {
+const createCircuit = (exp, direction = 0, parentNode = null, node = '0') => {
   const last = exp.pop();
   if (last in operations1 || last in operations2) {
     g.setNode(node, {
@@ -207,10 +203,10 @@ const createCircuit = (g, exp, direction = 0, parentNode = null, node = '0') => 
     });
 
     if (last in operations1) {
-      createCircuit(g, exp, 0, node, `${node}0`);
+      createCircuit(exp, 0, node, `${node}0`);
     } else {
-      createCircuit(g, exp, -1, node, `${node}0`);
-      createCircuit(g, exp, 1, node, `${node}1`);
+      createCircuit(exp, -1, node, `${node}0`);
+      createCircuit(exp, 1, node, `${node}1`);
     }
   } else {
     g.setNode(node, { label: last, direction });
@@ -356,6 +352,19 @@ const getOutputs = (exp, inputs) => {
   return outputs;
 };
 
+const resize = () => {
+  // Get graph width
+  const graphWidth = g.graph().width + 40;
+  // Get SVG width
+  const width = parseInt(svg.style('width').replace(/px/, ''), 10);
+
+  inner.attr('transform',
+    `translate(${(width - graphWidth * (width / graphWidth)) / 2}, 20),
+    scale(${width / graphWidth})`);
+
+  svg.attr('height', g.graph().height * (width / graphWidth) + 40);
+};
+
 // This runs whenever the expression is changed
 const newExpression = () => {
   const tokens = tokenize(expression.value);
@@ -367,24 +376,16 @@ const newExpression = () => {
   inner.selectAll('*').remove();
 
   // Create a new directed graph
-  const g = new graphlib.Graph().setGraph({ rankdir: 'RL', nodeSep: 20 });
+  g = new graphlib.Graph().setGraph({ rankdir: 'RL', nodeSep: 20 });
 
-  createCircuit(g, exp);
+  createCircuit(exp);
   createKarnaughMap(outputs, variables);
   createTruthTable(inputs, outputs, variables);
 
   // Run the renderer. This is what draws the final graph.
   render(inner, g);
 
-  // Get graph width
-  const graphWidth = g.graph().width + 40;
-  // Get SVG width
-  const width = parseInt(svg.style('width').replace(/px/, ''), 10);
-
-  svg.call(zoom.transform, d3.zoomIdentity
-    .translate((width - graphWidth * (width / graphWidth)) / 2, 20)
-    .scale(width / graphWidth));
-  svg.attr('height', g.graph().height * (width / graphWidth) + 40);
+  resize(g);
 };
 
 // This runs whenever an operator button is clicked
@@ -405,6 +406,8 @@ const operator = (elem) => {
 // Do newExpression once the page has loaded
 window.onload = () => { newExpression(); };
 
-expression.addEventListener('input', () => { newExpression(); }, { passive: true });
+expression.addEventListener('input', () => { newExpression(); });
 Array.from(operationButtons)
-  .forEach(operation => operation.addEventListener('click', () => { operator(operation); }, { passive: true }));
+  .forEach(operation => operation.addEventListener('click', () => { operator(operation); }));
+
+window.addEventListener('resize', () => { resize(); });
