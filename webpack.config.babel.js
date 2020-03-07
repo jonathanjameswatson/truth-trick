@@ -6,7 +6,6 @@ import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import { HashedModuleIdsPlugin } from 'webpack';
 import WebpackCleanupPlugin from 'webpack-cleanup-plugin';
 import SpriteLoaderPlugin from 'svg-sprite-loader/plugin';
-import WebpackPwaManifest from 'webpack-pwa-manifest';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
 
@@ -145,18 +144,14 @@ export default {
     new FriendlyErrorsWebpackPlugin(),
     new WebpackCleanupPlugin(),
     new SpriteLoaderPlugin(),
-    new WebpackPwaManifest({
-      name: 'Truth Trick',
-      short_name: 'Truth Trick',
-      description: 'A boolean expression visualiser',
-      icons: [
-        {
-          src: path.resolve('./logo.png'),
-          sizes: [96, 128, 192, 256, 384, 512],
-        },
-      ],
+    new FaviconsWebpackPlugin({
+      logo: './logo.png',
+      favicons: {
+        appName: 'Truth Trick',
+        appDescription: 'A boolean expression visualiser',
+        start_url: '/truth-trick/',
+      },
     }),
-    new FaviconsWebpackPlugin('./logo.png'),
     new WorkboxWebpackPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
