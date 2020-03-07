@@ -24,7 +24,7 @@ header {
   width: 50rem;
   max-width: 100%;
 
-  color: inherit;
+  color: #111;
 
   font-family: inherit;
   text-align: center;
@@ -64,7 +64,7 @@ header {
   font-size: 1rem;
 
   background-color: transparent;
-  color: inherit;
+  color: #111;
 
   border: 1px solid #111;
   border-radius: 0px;
@@ -86,7 +86,7 @@ header {
 
 a {
   margin: auto 1rem;
-  color: inherit;
+  color: #111;
 }
 
 #diagram {
