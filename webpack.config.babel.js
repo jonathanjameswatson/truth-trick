@@ -142,6 +142,6 @@ export default {
     new FriendlyErrorsWebpackPlugin(),
     new WebpackCleanupPlugin(),
     new SpriteLoaderPlugin(),
-    new FaviconsWebpackPlugin('logo.png'),
+    new FaviconsWebpackPlugin('./logo.png'),
   ],
 };
