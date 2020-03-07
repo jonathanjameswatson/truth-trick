@@ -14,7 +14,7 @@ export default {
   entry: './src/js/main.mjs',
   output: {
     path: path.resolve(__dirname, 'dist/'),
-    publicPath: '/truth-trick/assets/',
+    publicPath: '/truth-trick/',
     filename: '[name].[hash].mjs',
     chunkFilename: '[name].[chunkhash].chunk.mjs',
   },
