@@ -190,31 +190,35 @@ render.shapes().gate = (parent, bbox, node) => {
 };
 
 // Draws the circuit diagram
-const createCircuit = (exp, direction = 0, parentNode = null, node = '0') => {
-  const last = exp.pop();
-  if (last in operations1 || last in operations2) {
-    g.setNode(node, {
-      shape: 'gate',
-      label: '',
-      width: 180,
-      height: 90,
-      direction,
-      gate: names[last],
-    });
+const createCircuit = (exp) => {
+  g.setNode('0', { label: 'Q' });
 
-    if (last in operations1) {
-      createCircuit(exp, 0, node, `${node}0`);
+  const addNode = (direction, parentNode, node) => {
+    const last = exp.pop();
+    if (last in operations1 || last in operations2) {
+      g.setNode(node, {
+        shape: 'gate',
+        label: '',
+        width: 180,
+        height: 90,
+        direction,
+        gate: names[last],
+      });
+
+      if (last in operations1) {
+        addNode(0, node, `${node}0`);
+      } else {
+        addNode(-1, node, `${node}0`);
+        addNode(1, node, `${node}1`);
+      }
     } else {
-      createCircuit(exp, -1, node, `${node}0`);
-      createCircuit(exp, 1, node, `${node}1`);
+      g.setNode(node, { label: last, direction });
     }
-  } else {
-    g.setNode(node, { label: last, direction });
-  }
 
-  if (parentNode !== null) {
     g.setEdge(parentNode, node, { arrowhead: 'undirected' });
-  }
+  };
+
+  addNode(0, '0', '00');
 };
 
 // Creates a truth table
@@ -353,16 +357,17 @@ const getOutputs = (exp, inputs) => {
 };
 
 const resize = () => {
-  // Get graph width
-  const graphWidth = g.graph().width + 40;
+  // Get graph dimensions
+  const graphWidth = g.graph().width;
+  const graphHeight = g.graph().height;
   // Get SVG width
   const width = parseInt(svg.style('width').replace(/px/, ''), 10);
 
   inner.attr('transform',
-    `translate(${(width - graphWidth * (width / graphWidth)) / 2}, 20),
-    scale(${width / graphWidth})`);
+    `scale(${width / graphWidth}),
+    translate(0, 20)`);
 
-  svg.attr('height', g.graph().height * (width / graphWidth) + 40);
+  svg.attr('height', (graphHeight + 40) * (width / graphWidth));
 };
 
 // This runs whenever the expression is changed
