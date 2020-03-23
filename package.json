@@ -14,7 +14,7 @@
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
     "@babel/register": "^7.8.6",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.1.0",
     "clean-css-loader": "^2.0.0",
     "css-loader": "^3.4.2",
     "extract-css-chunks-webpack-plugin": "^4.7.4",
