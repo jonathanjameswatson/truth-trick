@@ -5921,10 +5921,10 @@ posthtml-svg-mode@^1.0.3:
     posthtml-parser "^0.2.1"
     posthtml-render "^1.0.6"
 
-posthtml-transform@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/posthtml-transform/-/posthtml-transform-1.0.7.tgz#c564aa03dc3ab427a34335aaad584f4d43724b35"
-  integrity sha512-ihbO3C1pqjgq94PjgxWyN/S0B+rW3lW3C2o+U0MHYilxDy7zft+u9r+Gk9YT+Nh5DyZyLgWj6Q9H1CR0Z/TPTg==
+posthtml-transform@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/posthtml-transform/-/posthtml-transform-1.0.10.tgz#ab771a8d0bdb53aa636415016694f9e75e83d86f"
+  integrity sha512-z45ehCxEh+kd9Ass6iULR42xklSTfhvrGaV0wJTi1QfAonWyMFTRAI9I/XNTuJsY8ljAFBYhCDzxEqqMevlyuw==
   dependencies:
     color-parse "^1.3.7"
     loader-utils "^1.1.0"
@@ -7182,16 +7182,16 @@ svg-sprite-loader@^4.2.1:
     svg-baker-runtime "^1.4.3"
     url-slug "2.0.0"
 
-svg-transform-loader@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/svg-transform-loader/-/svg-transform-loader-2.0.8.tgz#b22bb892a8dba1df61e5a18134fa3a0f403400fd"
-  integrity sha512-cK9PXVGV+hZoiR7lkIir+LOZ2qmJIuq0tm/emv5x7MF4PvyqY/lCNlYuctx37rSNgGE6Lhpdn8lUCZm8d/oNAQ==
+svg-transform-loader@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/svg-transform-loader/-/svg-transform-loader-2.0.12.tgz#8e8678938eed7a7a80b4667a5cb573e8b526d202"
+  integrity sha512-2w+0jsNXoZA51E/QAam/4dKI76KY1GnmDboCmsHekBLNQ7okS6BN8ze7LEnjD46zVyhCsFMNWqHzgpEQ3HADPA==
   dependencies:
     loader-utils "^1.1.0"
     lodash.isempty "^4.4.0"
     merge-options "^1.0.0"
     postcss "^7.0.14"
-    posthtml-transform "^1.0.7"
+    posthtml-transform "^1.0.10"
     postsvg "^2.2.7"
     query-string "^6.1.0"
     svg-mixer-utils "^0.3.4"

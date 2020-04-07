@@ -23,7 +23,7 @@
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^4.0.0-beta.14",
     "svg-sprite-loader": "^4.2.1",
-    "svg-transform-loader": "^2.0.8",
+    "svg-transform-loader": "^2.0.12",
     "svgo": "^1.3.0",
     "svgo-loader": "^2.2.1",
     "terser-webpack-plugin": "^2.3.5",
