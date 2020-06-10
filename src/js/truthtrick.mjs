@@ -26,6 +26,8 @@ const expression = document.getElementById('expressionInput');
 const truthTable = document.getElementById('truth-table');
 // The table element for the karnaugh map
 const karnaughMap = document.getElementById('karnaugh-map');
+// The section element for the karnaugh map
+const karnaughMapSection = document.getElementById('karnaugh-map-section');
 // The list of operator buttons
 const operationButtons = document.getElementsByClassName('operation');
 
@@ -274,6 +276,14 @@ const createTruthTable = (inputs, outputs, variables) => {
 const createKarnaughMap = (outputs, variables) => {
   const vertical = Math.floor(variables.length / 2);
   const horizontal = variables.length - vertical;
+
+  // Hide karnaugh map section if there is only one variable
+  if (variables.length <= 1) {
+    karnaughMapSection.hidden = true;
+    return;
+  }
+
+  karnaughMapSection.hidden = false;
 
   karnaughMap.firstElementChild.innerHTML = '';
 
