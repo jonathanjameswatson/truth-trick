@@ -4,7 +4,7 @@ import dagreD3 from './dagre/dagre-d3.min.js';
 import sprites from './sprites';
 import tokenize from './tokenize';
 import postfix from './postfix';
-
+import evaluate from './evaluate'
 
 const { render: Render, graphlib } = dagreD3;
 
@@ -32,20 +32,6 @@ let g;
 
 // Matches a string of letters
 const strRegex = /[A-Z]+/i;
-
-// Dictionary of operations that take one argument
-const operations1 = {
-  '¬': a => (!a), // NOT
-};
-
-// Dictionary of operations that take two arguments
-const operations2 = {
-  '∧': (a, b) => (a && b), // AND
-  '∨': (a, b) => (a || b), // OR
-  '→': (a, b) => (!a || b), // IMPLY
-  '⊕': (a, b) => (a ? !b : b), // XOR
-  '≡': (a, b) => (a === b), // XNOR
-};
 
 // Maps ones and zeroes to true and false and vice versa
 const conversion = {
@@ -227,20 +213,6 @@ const createKarnaughMap = (outputs, variables) => {
   }
 };
 
-// Evaluates a postfix expression
-const evaluate = (exp) => {
-  const last = exp.pop();
-  if (last in operations1) {
-    return operations1[last](evaluate(exp));
-  }
-  if (last in operations2) {
-    return operations2[last](evaluate(exp), evaluate(exp));
-  }
-  if (last in conversion) {
-    return conversion[last];
-  }
-  return last;
-};
 
 // Gets all inputs to the expression
 const getInputs = variables => [...Array(2 ** variables.length).keys()].map(
