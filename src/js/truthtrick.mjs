@@ -254,7 +254,7 @@ const createTruthTable = (inputs, outputs, variables) => {
       const cell = row.insertCell();
       const div = cell.appendChild(document.createElement('div'));
       div.classList.add('overflow');
-      div.appendChild(document.createTextNode(digit));
+      div.appendChild(document.createTextNode(digit[1]));
     });
 
     // Also enter the output in the Q column
@@ -347,25 +347,18 @@ const evaluate = (exp) => {
 };
 
 // Gets all inputs to the expression
-const getInputs = (length) => {
-  const inputs = [];
-  for (let i = 0; i < 2 ** length; i += 1) {
-    inputs.push(Number(i).toString(2).padStart(length, '0').split(''));
-  }
-
-  return inputs;
-};
+const getInputs = variables => [...Array(2 ** variables.length).keys()].map(
+  i => i.toString(2).padStart(variables.length, '0').split('').map((bool, j) => [variables[j], bool]),
+);
 
 // Gets all outputs from inputs to the expression
 const getOutputs = (exp, inputs) => {
   const outputs = [];
   inputs.forEach((input) => {
-    let replacedExp = exp;
-    let n = 0;
-    replacedExp = replacedExp.map((token) => {
-      if (strRegex.test(token)) {
-        n += 1;
-        return input[input.length - n];
+    const replacedExp = exp.map((token) => {
+      const match = token.match(strRegex);
+      if (match) {
+        return input.find(bool => bool[0] === match[0])[1];
       }
       return token;
     });
@@ -394,7 +387,7 @@ const newExpression = () => {
   const tokens = tokenize(expression.value);
   const variables = [...new Set(tokens.filter(token => strRegex.test(token)))];
   const exp = convertToPostfix(tokens);
-  const inputs = getInputs(variables.length);
+  const inputs = getInputs(variables);
   const outputs = getOutputs(exp, inputs);
 
   inner.selectAll('*').remove();
