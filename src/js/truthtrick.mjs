@@ -1,24 +1,12 @@
 import d3 from 'd3';
-import dagreD3 from './dagre-d3.min.js';
+import dagreD3 from './dagre/dagre-d3.min.js';
 
-import AND from '../images/gates/AND.svg';
-import IMPLY from '../images/gates/IMPLY.svg';
-import NOT from '../images/gates/NOT.svg';
-import OR from '../images/gates/OR.svg';
-import XNOR from '../images/gates/XNOR.svg';
-import XOR from '../images/gates/XOR.svg';
+import sprites from './sprites'
+
 
 const { render: Render, graphlib } = dagreD3;
 
 // SVGs of gates
-const sprites = {
-  AND,
-  IMPLY,
-  NOT,
-  OR,
-  XNOR,
-  XOR,
-};
 
 // The input element for the expression
 const expression = document.getElementById('expressionInput');
