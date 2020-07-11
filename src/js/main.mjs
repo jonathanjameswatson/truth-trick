@@ -6,6 +6,6 @@ import './truthtrick.mjs';
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
+    navigator.serviceWorker.register('/truth-trick/service-worker.js');
   });
 }
