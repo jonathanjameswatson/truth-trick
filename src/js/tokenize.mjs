@@ -6,6 +6,8 @@ const aliases = {
   '⊕': ['⊻', 'XOR', 'EOR', 'EXOR'],
   '→': ['>', '⇒', 'IMPLY', 'IMPLIES'],
   '≡': ['=', '↔', '⇔', '⊙', 'XNOR', 'ENOR', 'EXNOR', 'NXOR', 'EQUIVALENT', 'BICONDITIONAL'],
+  0: ['TRUE'],
+  1: ['FALSE'],
 };
 
 // A dictionary mapping aliases to the correct symbols
@@ -23,7 +25,7 @@ const aliasList = Object.values(aliases).flat();
 // Matches all whitespace
 const squeezeRegex = /\s+/g;
 // Matches all strings of letters, numbers or other characters
-const tokenRegex = /[A-Z]+|[01]+|\W/gi;
+const tokenRegex = /[A-Z][A-Z0-9]*|[01]|\W/gi;
 // Matches all characters that must be escaped in regex
 const escapeRegex = /[-[\]{}()*+?.,\\^$|#\s]/g;
 // Matches all symbols that must be replaced

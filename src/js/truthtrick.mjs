@@ -1,7 +1,9 @@
 import d3 from 'd3';
 import dagreD3 from './dagre/dagre-d3.min.js';
 
-import sprites from './sprites'
+import sprites from './sprites';
+import tokenize from './tokenize';
+import postfix from './postfix';
 
 
 const { render: Render, graphlib } = dagreD3;
@@ -28,63 +30,8 @@ const render = new Render();
 // The graph to be rendered
 let g;
 
-// What symbols or words will be converted into others
-const otherSymbols = {
-  '.': '∧',
-  '^': '∧',
-  '&': '∧',
-  AND: '∧',
-  '+': '∨',
-  '|': '∨',
-  OR: '∨',
-  '!': '¬',
-  NOT: '¬',
-  '⊻': '⊕',
-  XOR: '⊕',
-  EOR: '⊕',
-  EXOR: '⊕',
-  '>': '→',
-  IMPLY: '→',
-  IMPLIES: '→',
-  '=': '≡',
-  '⊙': '≡',
-  XNOR: '≡',
-  ENOR: '≡',
-  EXNOR: '≡',
-  NXOR: '≡',
-  EQUIVALENT: '≡',
-  BICONDITIONAL: '≡',
-};
-
-// Matches all whitespace
-const squeezeRegex = /\s+/g;
-// Matches all strings of letters, numbers or other characters
-const tokenRegex = /[A-Z]+|[01]+|\W/gi;
-// Matches all characters that must be escaped in regex
-const escapeRegex = /[-[\]{}()*+?.,\\^$|#\s]/g;
-// Matches all symbols that must be replaced
-const replaceRegex = new RegExp(Object.keys(otherSymbols).map(key => key.replace(escapeRegex, '\\$&')).join('|'), 'gi');
-
-// Returns an array of all tokens in an expression
-// First removes all whitespace and then replaces all symbols that need to be replaced
-const tokenize = exp => exp.replace(squeezeRegex, '').replace(replaceRegex, key => otherSymbols[key]).match(tokenRegex);
-
 // Matches a string of letters
 const strRegex = /[A-Z]+/i;
-// Matches a string of alphanumeric characters
-const alphaNum = /[A-Z01]/i;
-
-// Order of operations
-const precedence = {
-  undefined: 7,
-  '(': 6,
-  '→': 5,
-  '≡': 4,
-  '∨': 3,
-  '⊕': 2,
-  '∧': 1,
-  '¬': 0,
-};
 
 // Dictionary of operations that take one argument
 const operations1 = {
@@ -120,45 +67,6 @@ const names = {
   '→': 'IMPLY',
   '⊕': 'XOR',
   '≡': 'XNOR',
-};
-
-// Converts infix list of tokens to postfix list of tokens
-const convertToPostfix = (infix) => {
-  const postfix = [];
-  const stack = [];
-  const reverse = infix.reverse().map((token) => {
-    if (token === '(') {
-      return ')';
-    }
-    if (token === ')') {
-      return '(';
-    }
-    return token;
-  });
-  reverse.forEach((token) => {
-    if (alphaNum.test(token)) {
-      postfix.push(token);
-    } else if (token === '(') {
-      stack.push(token);
-    } else if (token === ')') {
-      let top = stack.pop();
-      while (top !== '(' && top !== undefined) {
-        postfix.push(top);
-        top = stack.pop();
-      }
-    } else if (stack.length === 0) {
-      stack.push(token);
-    } else {
-      let top = stack[stack.length - 1];
-      while (precedence[top] <= precedence[token]) {
-        postfix.push(stack.pop());
-        top = stack[stack.length - 1];
-      }
-      stack.push(token);
-    }
-  });
-  stack.reverse();
-  return postfix.concat(stack);
 };
 
 render.shapes().gate = (parent, bbox, node) => {
