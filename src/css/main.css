@@ -24,7 +24,8 @@ header {
 .expression {
   display: block;
   margin: 1rem auto;
-  height: 3rem;
+  padding: 1px;
+  line-height: 3rem;
   width: 50rem;
   max-width: 100%;
 
@@ -40,8 +41,6 @@ header {
   border: none;
   border-bottom: 1px solid #111;
   border-radius: 0px;
-
-  padding: 0px;
 }
 
 .expression:focus {
