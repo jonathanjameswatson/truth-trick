@@ -3,8 +3,10 @@ import dagreD3 from './dagre/dagre-d3.min.js';
 
 import sprites from './sprites';
 import tokenize from './tokenize';
+import getVariables from './variables';
 import postfix from './postfix';
-import evaluate from './evaluate'
+import getInputs from './inputs';
+import getOutputs from './outputs';
 
 const { render: Render, graphlib } = dagreD3;
 
@@ -29,17 +31,6 @@ const render = new Render();
 
 // The graph to be rendered
 let g;
-
-// Matches a string of letters
-const strRegex = /[A-Z]+/i;
-
-// Maps ones and zeroes to true and false and vice versa
-const conversion = {
-  0: false,
-  1: true,
-  false: '0',
-  true: '1',
-};
 
 // Returns a value n_i that differs by one bit from n_(i-1)
 // gray(0) = 0, gray(1) = 1, gray(2) = 3
@@ -213,29 +204,6 @@ const createKarnaughMap = (outputs, variables) => {
   }
 };
 
-
-// Gets all inputs to the expression
-const getInputs = variables => [...Array(2 ** variables.length).keys()].map(
-  i => i.toString(2).padStart(variables.length, '0').split('').map((bool, j) => [variables[j], bool]),
-);
-
-// Gets all outputs from inputs to the expression
-const getOutputs = (exp, inputs) => {
-  const outputs = [];
-  inputs.forEach((input) => {
-    const replacedExp = exp.map((token) => {
-      const match = token.match(strRegex);
-      if (match) {
-        return input.find(bool => bool[0] === match[0])[1];
-      }
-      return token;
-    });
-    outputs.push(conversion[evaluate(replacedExp)]);
-  });
-
-  return outputs;
-};
-
 const resize = () => {
   // Get graph dimensions
   const graphWidth = g.graph().width;
@@ -253,8 +221,8 @@ const resize = () => {
 // This runs whenever the expression is changed
 const newExpression = () => {
   const tokens = tokenize(expression.value);
-  const variables = [...new Set(tokens.filter(token => strRegex.test(token)))];
-  const exp = convertToPostfix(tokens);
+  const variables = getVariables(tokens);
+  const exp = postfix(tokens);
   const inputs = getInputs(variables);
   const outputs = getOutputs(exp, inputs);
 

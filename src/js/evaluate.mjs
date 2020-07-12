@@ -41,4 +41,7 @@ const evaluate = (exp) => {
   return token;
 };
 
-export default evaluate;
+export default (exp) => {
+  const newExp = exp.slice();
+  return evaluate(newExp);
+};
