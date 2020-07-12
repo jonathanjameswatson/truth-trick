@@ -1,14 +1,7 @@
+import newCell from './newCell';
+
 // The table element for the truth table
 const truthTable = document.getElementById('truth-table');
-
-// Adds a cell to a given row with given text
-const newCell = (row, text) => {
-  const cell = row.insertCell();
-  const div = cell.appendChild(document.createElement('div'));
-  div.classList.add('overflow');
-  div.appendChild(document.createTextNode(text));
-  return cell;
-};
 
 // Creates a truth table
 export default (inputs, outputs, variables) => {
