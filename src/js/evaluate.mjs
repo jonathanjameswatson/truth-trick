@@ -13,7 +13,7 @@ const operations = {
 };
 
 // Dictionary of functions and how many variables each one takes
-const operationVariableCounts = Object.fromEntries(
+export const operationVariableCounts = Object.fromEntries(
   Object.entries(operations).flatMap(
     ([n, symbols]) => Object.keys(symbols).map(
       symbol => [symbol, n],

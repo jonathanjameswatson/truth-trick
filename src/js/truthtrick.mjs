@@ -1,16 +1,10 @@
-import d3 from 'd3';
-import dagreD3 from './dagre/dagre-d3.min.js';
-
-import sprites from './sprites';
 import tokenize from './tokenize';
 import getVariables from './variables';
 import postfix from './postfix';
 import getInputs from './inputs';
 import getOutputs from './outputs';
 
-const { render: Render, graphlib } = dagreD3;
-
-// SVGs of gates
+import { drawCircuit, resize } from './drawCircuit';
 
 // The input element for the expression
 const expression = document.getElementById('expressionInput');
@@ -23,87 +17,9 @@ const karnaughMapSection = document.getElementById('karnaugh-map-section');
 // The list of operator buttons
 const operationButtons = document.getElementsByClassName('operation');
 
-const svg = d3.select('#diagram');
-const inner = svg.select('g');
-
-// Create the renderer
-const render = new Render();
-
-// The graph to be rendered
-let g;
-
 // Returns a value n_i that differs by one bit from n_(i-1)
 // gray(0) = 0, gray(1) = 1, gray(2) = 3
 const gray = i => i ^ (i >> 1); // eslint-disable-line no-bitwise
-
-// Maps names to symbols
-const names = {
-  '¬': 'NOT',
-  '∧': 'AND',
-  '∨': 'OR',
-  '→': 'IMPLY',
-  '⊕': 'XOR',
-  '≡': 'XNOR',
-};
-
-render.shapes().gate = (parent, bbox, node) => {
-  const w = bbox.width;
-  const h = bbox.height;
-  const points = [
-    { x: w * 0.05, y: -h * 0.3 },
-    { x: w * 0.3, y: -h * 0.1 },
-    { x: w * 0.95, y: -h / 2 },
-    { x: w * 0.3, y: -h * 0.9 },
-    { x: w * 0.05, y: -h * 0.7 },
-  ];
-
-  const shapeSvg = parent.insert('polygon', ':first-child')
-    .attr('points', points.map(d => `${d.x},${d.y}`).join(' '))
-    .attr('transform', `translate(${-w / 2},${h * 0.5})`);
-
-  parent.insert('svg')
-    .attr('class', 'nodeImage')
-    .attr('x', -w / 2)
-    .attr('y', -h / 2)
-    .attr('width', w)
-    .attr('height', h)
-    .insert('use')
-    .attr('href', sprites[node.gate].url);
-
-  return shapeSvg;
-};
-
-// Draws the circuit diagram
-const createCircuit = (exp) => {
-  g.setNode('0', { label: 'Q' });
-
-  const addNode = (direction, parentNode, node) => {
-    const last = exp.pop();
-    if (last in operations1 || last in operations2) {
-      g.setNode(node, {
-        shape: 'gate',
-        label: '',
-        width: 180,
-        height: 90,
-        direction,
-        gate: names[last],
-      });
-
-      if (last in operations1) {
-        addNode(0, node, `${node}0`);
-      } else {
-        addNode(-1, node, `${node}0`);
-        addNode(1, node, `${node}1`);
-      }
-    } else {
-      g.setNode(node, { label: last, direction });
-    }
-
-    g.setEdge(parentNode, node, { arrowhead: 'undirected' });
-  };
-
-  addNode(0, '0', '00');
-};
 
 // Creates a truth table
 const createTruthTable = (inputs, outputs, variables) => {
@@ -204,20 +120,6 @@ const createKarnaughMap = (outputs, variables) => {
   }
 };
 
-const resize = () => {
-  // Get graph dimensions
-  const graphWidth = g.graph().width;
-  const graphHeight = g.graph().height;
-  // Get SVG width
-  const width = parseInt(svg.style('width').replace(/px/, ''), 10);
-
-  inner.attr('transform',
-    `scale(${width / graphWidth}),
-    translate(0, 20)`);
-
-  svg.attr('height', (graphHeight + 40) * (width / graphWidth));
-};
-
 // This runs whenever the expression is changed
 const newExpression = () => {
   const tokens = tokenize(expression.value);
@@ -226,19 +128,9 @@ const newExpression = () => {
   const inputs = getInputs(variables);
   const outputs = getOutputs(exp, inputs);
 
-  inner.selectAll('*').remove();
-
-  // Create a new directed graph
-  g = new graphlib.Graph().setGraph({ rankdir: 'RL', nodeSep: 20 });
-
-  createCircuit(exp);
+  drawCircuit(exp);
   createKarnaughMap(outputs, variables);
   createTruthTable(inputs, outputs, variables);
-
-  // Run the renderer. This is what draws the final graph.
-  render(inner, g);
-
-  resize(g);
 };
 
 // This runs whenever an operator button is clicked
