@@ -19,6 +19,7 @@ export default {
   },
   devServer: {
     contentBase: './dist',
+    openPage: '/truth-trick',
   },
   optimization: {
     minimize: true,
