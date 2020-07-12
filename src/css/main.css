@@ -119,7 +119,8 @@ th, td {
 
 .overflow {
   width: 100%;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 .highlighted {
