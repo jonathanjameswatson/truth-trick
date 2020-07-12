@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Overpass+Mono&display=swap');
 
+* {
+  box-sizing: border-box;
+}
+
 html {
   padding: 0px;
 }
