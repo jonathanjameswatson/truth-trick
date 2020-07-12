@@ -5,11 +5,10 @@ import getInputs from './inputs';
 import getOutputs from './outputs';
 
 import { drawCircuit, resize } from './drawCircuit';
+import drawTruthTable from './drawTruthTable';
 
 // The input element for the expression
 const expression = document.getElementById('expressionInput');
-// The table element for the truth table
-const truthTable = document.getElementById('truth-table');
 // The table element for the karnaugh map
 const karnaughMap = document.getElementById('karnaugh-map');
 // The section element for the karnaugh map
@@ -20,46 +19,6 @@ const operationButtons = document.getElementsByClassName('operation');
 // Returns a value n_i that differs by one bit from n_(i-1)
 // gray(0) = 0, gray(1) = 1, gray(2) = 3
 const gray = i => i ^ (i >> 1); // eslint-disable-line no-bitwise
-
-// Creates a truth table
-const createTruthTable = (inputs, outputs, variables) => {
-  truthTable.firstElementChild.innerHTML = '';
-
-  // Variables like A, B and Q are on the top row
-  const header = truthTable.insertRow();
-  variables.push('Q');
-  variables.forEach((variable) => {
-    const cell = header.insertCell();
-    const div = cell.appendChild(document.createElement('div'));
-    div.classList.add('overflow');
-    div.appendChild(document.createTextNode(variable));
-  });
-
-  // For each array of inputs, make a row
-  inputs.forEach((input, i) => {
-    const row = truthTable.insertRow();
-    // For each input, enter it into a cell
-    input.forEach((digit) => {
-      const cell = row.insertCell();
-      const div = cell.appendChild(document.createElement('div'));
-      div.classList.add('overflow');
-      div.appendChild(document.createTextNode(digit[1]));
-    });
-
-    // Also enter the output in the Q column
-    const out = row.insertCell();
-    const outDiv = out.appendChild(document.createElement('div'));
-    outDiv.classList.add('overflow');
-    outDiv.appendChild(document.createTextNode(outputs[i]));
-
-    // Highlights 1s on outputs
-    if (outputs[i] === '1') {
-      out.classList.add('highlighted');
-    } else {
-      out.classList.remove('highlighted');
-    }
-  });
-};
 
 // Creates a karnaugh map
 const createKarnaughMap = (outputs, variables) => {
@@ -129,8 +88,8 @@ const newExpression = () => {
   const outputs = getOutputs(exp, inputs);
 
   drawCircuit(exp);
+  drawTruthTable(inputs, outputs, variables);
   createKarnaughMap(outputs, variables);
-  createTruthTable(inputs, outputs, variables);
 };
 
 // This runs whenever an operator button is clicked

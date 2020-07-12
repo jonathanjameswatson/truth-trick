@@ -21,22 +21,19 @@ export const operationVariableCounts = Object.fromEntries(
   ),
 );
 
-const numbersToBooleans = {
-  0: false,
-  1: true,
-};
+// Converts a number to a boolean
+const numberToBoolean = number => number === '1';
 
 // Evaluates a postfix expression
 const evaluate = (exp) => {
   const token = exp.pop();
   if (token in operationVariableCounts) {
     const variablesCount = operationVariableCounts[token];
-    return operations[variablesCount][token](
-      ...[...Array(variablesCount)].map(() => evaluate(exp)),
-    );
+    const parameters = Array(Number(variablesCount)).fill().map(() => evaluate(exp));
+    return operations[variablesCount][token](...parameters);
   }
-  if (token in numbersToBooleans) {
-    return numbersToBooleans[token];
+  if (token in [0, 1]) {
+    return numberToBoolean(token);
   }
   return token;
 };

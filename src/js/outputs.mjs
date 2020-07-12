@@ -1,10 +1,7 @@
 import evaluate from './evaluate';
 import variableRegex from './variableRegex';
 
-const booleansToNumbers = {
-  false: 0,
-  true: 1,
-};
+const booleanToNumber = boolean => (boolean ? 1 : 0);
 
 // Gets all outputs from inputs to an expression.
 // A list of 1s and 0s.
@@ -17,7 +14,9 @@ export default (exp, inputs) => {
       }
       return token;
     });
-    return booleansToNumbers[evaluate(replacedExp)];
+    console.log(replacedExp.join(''))
+    console.log(evaluate(replacedExp))
+    return booleanToNumber(evaluate(replacedExp));
   });
 
   return outputs;
