@@ -5,18 +5,27 @@ const aliases = {
   '¬': ['!', 'NOT'],
   '⊕': ['⊻', 'XOR', 'EOR', 'EXOR'],
   '→': ['>', '⇒', 'IMPLY', 'IMPLIES'],
-  '≡': ['=', '↔', '⇔', '⊙', 'XNOR', 'ENOR', 'EXNOR', 'NXOR', 'EQUIVALENT', 'BICONDITIONAL'],
+  '≡': [
+    '=',
+    '↔',
+    '⇔',
+    '⊙',
+    'XNOR',
+    'ENOR',
+    'EXNOR',
+    'NXOR',
+    'EQUIVALENT',
+    'BICONDITIONAL',
+  ],
   0: ['TRUE'],
   1: ['FALSE'],
 };
 
 // A dictionary mapping aliases to the correct symbols
 const aliasMap = Object.fromEntries(
-  Object.entries(aliases).flatMap(
-    ([symbol, symbolAliases]) => symbolAliases.map(
-      symbolAlias => [symbolAlias, symbol],
-    ),
-  ),
+  Object.entries(aliases).flatMap(([symbol, symbolAliases]) =>
+    symbolAliases.map((symbolAlias) => [symbolAlias, symbol])
+  )
 );
 
 // A list of aliases
@@ -30,14 +39,14 @@ const tokenRegex = /[A-Z][A-Z0-9]*|[01]|\W/gi;
 const escapeRegex = /[-[\]{}()*+?.,\\^$|#\s]/g;
 // Matches all symbols that must be replaced
 const replaceRegex = new RegExp(
-  aliasList.map(
-    alias => alias.replace(escapeRegex, '\\$&'),
-  ).join('|'),
-  'gi',
+  aliasList.map((alias) => alias.replace(escapeRegex, '\\$&')).join('|'),
+  'gi'
 );
 
 // Returns an array of all tokens in an expression
 // First removes all whitespace and then replaces all aliases that need to be replaced
-export default exp => exp.replace(squeezeRegex, '')
-  .replace(replaceRegex, alias => aliasMap[alias])
-  .match(tokenRegex);
+export default (exp) =>
+  exp
+    .replace(squeezeRegex, '')
+    .replace(replaceRegex, (alias) => aliasMap[alias])
+    .match(tokenRegex);

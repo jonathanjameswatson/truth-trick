@@ -31,9 +31,12 @@ const operator = (elem) => {
   const symbol = elem.textContent || elem.innerText;
   const start = expression.selectionStart;
   const before = expression.value.substring(0, start);
-  const after = expression.value.substring(expression.selectionEnd, expression.value.length);
+  const after = expression.value.substring(
+    expression.selectionEnd,
+    expression.value.length
+  );
 
-  expression.value = (before + symbol + after);
+  expression.value = before + symbol + after;
   expression.focus();
   expression.selectionStart = start + 1;
   expression.selectionEnd = expression.selectionStart;
@@ -42,10 +45,19 @@ const operator = (elem) => {
 };
 
 // Do newExpression once the page has loaded
-window.onload = () => { newExpression(); };
+window.onload = () => {
+  newExpression();
+};
 
-expression.addEventListener('input', () => { newExpression(); });
-Array.from(operationButtons)
-  .forEach(operation => operation.addEventListener('click', () => { operator(operation); }));
+expression.addEventListener('input', () => {
+  newExpression();
+});
+Array.from(operationButtons).forEach((operation) =>
+  operation.addEventListener('click', () => {
+    operator(operation);
+  })
+);
 
-window.addEventListener('resize', () => { resize(); });
+window.addEventListener('resize', () => {
+  resize();
+});

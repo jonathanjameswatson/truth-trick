@@ -1,5 +1,5 @@
 import d3 from 'd3';
-import dagreD3 from './dagre/dagre-d3.min.js';
+import dagreD3 from '../dagre/dagre-d3.min';
 
 import sprites from './sprites';
 import { operationVariableCounts } from './evaluate';
@@ -36,11 +36,13 @@ render.shapes().gate = (parent, bbox, node) => {
     { x: w * 0.05, y: -h * 0.7 },
   ];
 
-  const shapeSvg = parent.insert('polygon', ':first-child')
-    .attr('points', points.map(d => `${d.x},${d.y}`).join(' '))
+  const shapeSvg = parent
+    .insert('polygon', ':first-child')
+    .attr('points', points.map((d) => `${d.x},${d.y}`).join(' '))
     .attr('transform', `translate(${-w / 2},${h * 0.5})`);
 
-  parent.insert('svg')
+  parent
+    .insert('svg')
     .attr('class', 'nodeImage')
     .attr('x', -w / 2)
     .attr('y', -h / 2)
@@ -59,9 +61,11 @@ export const resize = () => {
   // Get SVG width
   const width = parseInt(svg.style('width').replace(/px/, ''), 10);
 
-  inner.attr('transform',
+  inner.attr(
+    'transform',
     `scale(${width / graphWidth}),
-    translate(0, 20)`);
+    translate(0, 20)`
+  );
 
   svg.attr('height', (graphHeight + 40) * (width / graphWidth));
 };

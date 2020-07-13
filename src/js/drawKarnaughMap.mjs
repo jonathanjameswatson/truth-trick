@@ -7,7 +7,7 @@ const karnaughMapSection = document.getElementById('karnaugh-map-section');
 
 // Returns a value n_i that differs by one bit from n_(i-1)
 // gray(0) = 0, gray(1) = 1, gray(2) = 3
-const gray = i => i ^ (i >> 1); // eslint-disable-line no-bitwise
+const gray = (i) => i ^ (i >> 1); // eslint-disable-line no-bitwise
 
 // Returns a gray number of a certain length as a binary string
 const grayString = (i, length) => gray(i).toString(2).padStart(length, '0');
@@ -30,7 +30,9 @@ export default (outputs, variables) => {
   const header = karnaughMap.insertRow();
 
   // Creates top left corner
-  const keyText = `${variables.slice(0, vertical).join('')}\\${variables.slice(vertical).join('')}`;
+  const keyText = `${variables.slice(0, vertical).join('')}\\${variables
+    .slice(vertical)
+    .join('')}`;
   newCell(header, keyText);
 
   // Creates headings for the top

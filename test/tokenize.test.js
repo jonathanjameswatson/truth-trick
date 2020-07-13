@@ -1,7 +1,8 @@
-import tokenize from '../src/js/tokenize.mjs';
+import tokenize from '../src/js/tokenize';
 
 describe('tokenize', () => {
-  it('Whitespace is removed', () => {
-    expect(tokenize('A ∧ B')).toEqual(['A', '∧', 'B']);
+  it('whitespace is removed', () => {
+    expect.assertions(1)
+    expect(tokenize('A ∧ B')).toStrictEqual(['A', '∧', 'B']);
   });
 });
