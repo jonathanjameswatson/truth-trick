@@ -23,14 +23,25 @@ jobs:
       name: Install
       run: npm install
     -
+       name: Test
+       run: npm run test
+    -
       name: Generate
-      run: npm run build --if-present
+      if: success()
+      run: npm run build
+    -
+      name: Check GitHub Pages status
+      if: success()
+      uses: crazy-max/ghaction-github-status@v1
+      with:
+        pages_threshold: major_outage
     -
       name: Deploy
       if: success()
-      uses: crazy-max/ghaction-github-pages@v1
+      uses: crazy-max/ghaction-github-pages@v2
       with:
         target_branch: gh-pages
         build_dir: dist
+        jekyll: false 
       env:
-        GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
