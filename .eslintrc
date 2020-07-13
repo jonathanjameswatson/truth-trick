@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "env": {
+    "jest/globals": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "ecmaFeatures": {
+      "modules": true
+    }
+  },
+  "extends": [
+    "airbnb-base",
+    "prettier",
+    "plugin:jest/all",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "plugins": [
+    "prettier",
+    "jest"
+  ],
+  "rules": {}
+}
