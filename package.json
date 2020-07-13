@@ -7,13 +7,17 @@
   "author": "Jonathan J Watson",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode production",
-    "dev": "webpack-dev-server --open"
+    "build": "webpack --mode production --display-error-details",
+    "dev": "webpack-dev-server --open",
+    "build:test": "webpack --config test/webpack.test.config.babel.js --display-error-details",
+    "jest": "jest test_dist/bundle.test.js",
+    "test": "yarn build:test && yarn jest"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.4",
+    "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "clean-css-loader": "^2.0.0",
     "css-loader": "^3.6.0",
@@ -21,7 +25,9 @@
     "favicons-webpack-plugin": "^3.0.1",
     "file-loader": "^6.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
+    "glob": "^7.1.6",
     "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.1.0",
     "svg-sprite-loader": "^5.0.0",
     "svg-transform-loader": "^2.0.13",
     "svgo": "^1.3.0",
