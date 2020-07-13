@@ -1,24 +1,29 @@
 // What symbols or words will be converted into others
+// Always place a XX alias before an X alias for any symbol X
+// Aliases with letters must be upper case
 const aliases = {
-  '∧': ['.', '^', '&', 'AND', '+', '|', '⋂'],
-  '∨': ['OR', '⋃'],
-  '¬': ['!', 'NOT'],
-  '⊕': ['⊻', 'XOR', 'EOR', 'EXOR'],
-  '→': ['>', '⇒', 'IMPLY', 'IMPLIES'],
+  '∧': ['.', '⋅', '^', '&&', '&', 'AND', '*', '×', '⋂'],
+  '∨': ['OR', '+', '||', '|', '⋃'],
+  '¬': ['!', '~', '-', 'NOT'],
+  '⊕': ['⊻', '⩒', '⩛', '≢', '^', '><', '>-<', '↮', 'XOR', 'EOR', 'EXOR'],
+  '→': ['>', '⇒', '⊃', 'IMPLY', 'IMPLIES'],
   '≡': [
     '=',
     '↔',
     '⇔',
     '⊙',
+    'IFF',
+    'IF AND ONLY IF',
     'XNOR',
+    "XORN'T",
     'ENOR',
     'EXNOR',
     'NXOR',
     'EQUIVALENT',
     'BICONDITIONAL',
   ],
-  0: ['TRUE'],
-  1: ['FALSE'],
+  0: ['FALSE'],
+  1: ['TRUE'],
 };
 
 // A dictionary mapping aliases to the correct symbols
@@ -47,6 +52,6 @@ const replaceRegex = new RegExp(
 // First removes all whitespace and then replaces all aliases that need to be replaced
 export default (exp) =>
   exp
+    .replace(replaceRegex, (alias) => aliasMap[alias.toUpperCase()])
     .replace(squeezeRegex, '')
-    .replace(replaceRegex, (alias) => aliasMap[alias])
     .match(tokenRegex);
