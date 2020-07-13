@@ -1,9 +1,10 @@
 import { resolve } from 'path';
 import glob from 'glob';
 
-const testFiles = glob.sync('test/*.test.js')
-  .filter(file => file !== 'test/bundle.test.js')
-  .map(file => `./${file}`);
+const testFiles = glob
+  .sync('test/*.test.js')
+  .filter((file) => file !== 'test/bundle.test.js')
+  .map((file) => `./${file}`);
 
 export default {
   entry: testFiles,
@@ -19,11 +20,11 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
-    ]
+    ],
   },
-  mode: 'none'
+  mode: 'none',
 };

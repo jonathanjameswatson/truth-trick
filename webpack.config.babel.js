@@ -75,19 +75,18 @@ export default {
   module: {
     rules: [
       {
-        test: /\.mjs$/,
+        test: /\.js$/,
         exclude: /node_modules/,
-        use: [
-          'babel-loader?cacheDirectory=true',
-        ],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
       {
         test: /\.css$/,
-        use: [
-          ExtractCssChunks.loader,
-          'css-loader',
-          'clean-css-loader',
-        ],
+        use: [ExtractCssChunks.loader, 'css-loader', 'clean-css-loader'],
       },
       {
         test: /\.svg$/,
@@ -104,13 +103,15 @@ export default {
       },
       {
         test: /\.(woff2|woff)$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/',
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'fonts/',
+            },
           },
-        }],
+        ],
       },
     ],
   },
@@ -131,12 +132,10 @@ export default {
         minifyURLs: true,
       },
     }),
-    new ExtractCssChunks(
-      {
-        filename: '[name].css',
-        chunkFilename: '[id].css',
-      },
-    ),
+    new ExtractCssChunks({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
     new HashedModuleIdsPlugin({
       hashFunction: 'sha256',
       hashDigest: 'hex',
