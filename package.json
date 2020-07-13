@@ -12,8 +12,8 @@
     "build:test": "webpack --config test/webpack.test.config.babel.js --display-error-details",
     "jest": "jest test_dist/bundle.test.js",
     "test": "yarn build:test && yarn jest",
-    "lint": "eslint \"src/js/**\" -c .eslintrc --ext js,mjs",
-    "lint:test": "eslint test -c .eslintrc --ext js,mjs"
+    "lint": "eslint \"src/js/**\" test -c .eslintrc --ext js,mjs",
+    "fix": "yarn lint --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
