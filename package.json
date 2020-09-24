@@ -55,6 +55,6 @@
     "d3": "^6.0.0",
     "dagre": "^0.8.4",
     "graphlib": "^2.1.7",
-    "modern-normalize": "^0.7.0"
+    "modern-normalize": "^1.0.0"
   }
 }
