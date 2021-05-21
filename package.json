@@ -23,7 +23,7 @@
     "babel-jest": "26.3.0",
     "babel-loader": "8.1.0",
     "clean-css-loader": "2.0.0",
-    "css-loader": "4.3.0",
+    "css-loader": "5.2.5",
     "eslint": "7.9.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-config-prettier": "6.11.0",
