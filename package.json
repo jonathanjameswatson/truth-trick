@@ -48,7 +48,7 @@
     "webpack-cleanup-plugin": "0.5.1",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.0",
-    "workbox-webpack-plugin": "5.1.4"
+    "workbox-webpack-plugin": "6.2.4"
   },
   "dependencies": {
     "core-js": "^3.6.5",
