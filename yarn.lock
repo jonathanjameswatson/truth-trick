@@ -1603,6 +1603,11 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
   integrity sha512-3c+yGKvVP5Y9TYBEibGNR+kLtijnj7mYrXRg+WpFb2X9xm04g/DXYkfg4hmzJQosc9snFNUPkbYIhu+KAm6jJw==
 
+"@types/json-schema@^7.0.8":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"
+  integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
+
 "@types/json5@^0.0.29":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
@@ -1960,6 +1965,16 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.4, ajv@^6.5.1:
   version "6.12.5"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.5.tgz#19b0e8bae8f476e5ba666300387775fb1a00a4da"
   integrity sha512-lRF8RORchjpKG50/WFf8xmg7sgCLFiYNNnqdKflk63whMQcWR5ngGjiSXkL9bjxy6B2npOK2HSMN49jEBMSkag==
+  dependencies:
+    fast-deep-equal "^3.1.1"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.4.1"
+    uri-js "^4.2.2"
+
+ajv@^6.12.5:
+  version "6.12.6"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
+  integrity sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==
   dependencies:
     fast-deep-equal "^3.1.1"
     fast-json-stable-stringify "^2.0.0"
@@ -2929,18 +2944,26 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-clean-css-loader@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/clean-css-loader/-/clean-css-loader-2.0.0.tgz#8d34aaa45767a2166963e7e797d74faa239d70ff"
-  integrity sha512-wULJG7dHXvWYRg+9cNNExv07VWQhyTdnmL3mOlsN14C5SeqLw8Qu/2vAlq/p35oi1HvkttiSiEuUe0fDXsV6Fg==
+clean-css-loader@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/clean-css-loader/-/clean-css-loader-4.1.1.tgz#b09c37ed6473889a6c71574c86f3d14b62ec5294"
+  integrity sha512-ipWsH2tIjBcMjB/hDFEPMYbTJYgewEqNJj6wAIfr1ZFme4r5O4WuUFdcVCym/t1sTOB+h0lQWPeUJOWq8cu1HQ==
   dependencies:
-    clean-css "^4.2.1"
-    loader-utils "^1.2.3"
+    clean-css "^5.0.0"
+    loader-utils "^2.0.0"
+    schema-utils "^3.0.0"
 
-clean-css@4.2.x, clean-css@^4.2.1, clean-css@^4.2.3:
+clean-css@4.2.x, clean-css@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.3.tgz#507b5de7d97b48ee53d84adb0160ff6216380f78"
   integrity sha512-VcMWDN54ZN/DS+g58HYL5/n4Zrqe8vHJpGA8KdgUXFU4fuP/aHNw8eld9SyEIyabIMJX/0RaY/fplOo5hYLSFA==
+  dependencies:
+    source-map "~0.6.0"
+
+clean-css@^5.0.0:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-5.2.1.tgz#e5bdb1bee5f332c67e98cb6181251d4f88c0a6ab"
+  integrity sha512-ooQCa1/70oRfVdUUGjKpbHuxgMgm8BsDT5EBqBGvPxMoRoGXf4PNx5mMnkjzJ9Ptx4vvmDdha0QVh86QtYIk1g==
   dependencies:
     source-map "~0.6.0"
 
@@ -8946,6 +8969,15 @@ schema-utils@^2.0.0, schema-utils@^2.6.5, schema-utils@^2.7.1:
   dependencies:
     "@types/json-schema" "^7.0.5"
     ajv "^6.12.4"
+    ajv-keywords "^3.5.2"
+
+schema-utils@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-3.1.1.tgz#bc74c4b6b6995c1d88f76a8b77bea7219e0c8281"
+  integrity sha512-Y5PQxS4ITlC+EahLuXaY86TXfR7Dc5lw294alXOq86JAHCihAIZfqv8nNCWvaEJvaC51uN9hbLGeV0cFBdH+Fw==
+  dependencies:
+    "@types/json-schema" "^7.0.8"
+    ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
 select-hose@^2.0.0:
