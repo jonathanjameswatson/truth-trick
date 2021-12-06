@@ -51,7 +51,7 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
+    "core-js": "^3.19.3",
     "d3": "^6.0.0",
     "dagre": "^0.8.4",
     "graphlib": "^2.1.7",
