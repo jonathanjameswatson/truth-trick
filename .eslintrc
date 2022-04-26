@@ -6,7 +6,7 @@
     "es6": true
   },
   "parserOptions": {
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "sourceType": "module",
     "ecmaFeatures": {
       "modules": true

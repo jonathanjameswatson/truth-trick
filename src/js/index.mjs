@@ -2,7 +2,7 @@ import 'modern-normalize/modern-normalize.css';
 import '../css/main.css';
 import '../images/github.svg';
 
-import './truthtrick';
+import './truthTrick';
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

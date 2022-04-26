@@ -1,25 +1,26 @@
-import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import { HashedModuleIdsPlugin } from 'webpack';
-import WebpackCleanupPlugin from 'webpack-cleanup-plugin';
 import SpriteLoaderPlugin from 'svg-sprite-loader/plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
 
 export default {
-  entry: './src/js/main.mjs',
+  entry: './src/js/index.mjs',
+  mode: process.env.WEBPACK_SERVE ? 'development' : 'production',
+  devtool: process.env.WEBPACK_SERVE ? 'eval-cheap-source-map' : false,
+  resolve: {
+    extensions: ['.js', '.mjs'],
+  },
   output: {
-    path: path.resolve(__dirname, 'dist/'),
+    filename: '[name].[contenthash].mjs',
     publicPath: '/truth-trick/',
-    filename: '[name].[hash].mjs',
     chunkFilename: '[name].[chunkhash].chunk.mjs',
+    clean: true,
   },
   devServer: {
-    contentBase: './dist',
-    openPage: '/truth-trick',
+    hot: true,
+    open: ['/truth-trick/index.html'],
   },
   optimization: {
     minimize: true,
@@ -45,37 +46,14 @@ export default {
           },
         },
         parallel: true,
-        sourceMap: false,
-        cache: true,
       }),
     ],
-    splitChunks: {
-      chunks: 'all',
-      minSize: 30000,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      name: true,
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
-          chunks: 'all',
-        },
-        main: {
-          chunks: 'all',
-          minChunks: 2,
-          reuseExistingChunk: true,
-          enforce: true,
-        },
-      },
-    },
     runtimeChunk: true,
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -83,10 +61,13 @@ export default {
             presets: ['@babel/preset-env'],
           },
         },
+        resolve: {
+          fullySpecified: false,
+        },
       },
       {
         test: /\.css$/,
-        use: [ExtractCssChunks.loader, 'css-loader', 'clean-css-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.svg$/,
@@ -132,17 +113,7 @@ export default {
         minifyURLs: true,
       },
     }),
-    new ExtractCssChunks({
-      filename: '[name].css',
-      chunkFilename: '[id].css',
-    }),
-    new HashedModuleIdsPlugin({
-      hashFunction: 'sha256',
-      hashDigest: 'hex',
-      hashDigestLength: 20,
-    }),
-    new FriendlyErrorsWebpackPlugin(),
-    new WebpackCleanupPlugin(),
+    new MiniCssExtractPlugin(),
     new SpriteLoaderPlugin(),
     new FaviconsWebpackPlugin({
       logo: './logo.png',

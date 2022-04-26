@@ -1,4 +1,4 @@
-import d3 from 'd3';
+import * as d3 from 'd3';
 import dagreD3 from '../dagre/dagre-d3.min';
 
 import sprites from './sprites';
