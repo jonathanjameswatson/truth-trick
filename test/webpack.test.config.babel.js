@@ -8,6 +8,9 @@ const testFiles = glob
 
 export default {
   entry: testFiles,
+  resolve: {
+    extensions: ['.js', '.mjs'],
+  },
   output: {
     path: resolve(__dirname, '../test_dist/'),
     filename: 'bundle.test.js',
