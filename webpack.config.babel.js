@@ -123,9 +123,14 @@ export default {
         start_url: '/truth-trick/',
       },
     }),
-    new WorkboxWebpackPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-    }),
+    ...(process.env.WEBPACK_SERVE
+      ? []
+      : [
+          new WorkboxWebpackPlugin.GenerateSW({
+            clientsClaim: true,
+            skipWaiting: true,
+            maximumFileSizeToCacheInBytes: 6000000,
+          }),
+        ]),
   ],
 };
