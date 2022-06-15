@@ -1,8 +1,9 @@
+import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import SpriteLoaderPlugin from 'svg-sprite-loader/plugin';
-import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import WebpackFaviconsPlugin from 'webpack-favicons';
 import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
 
 export default {
@@ -15,6 +16,7 @@ export default {
   output: {
     filename: '[name].[contenthash].mjs',
     publicPath: '/truth-trick/',
+    path: path.resolve(__dirname, 'dist'),
     chunkFilename: '[name].[chunkhash].chunk.mjs',
     clean: true,
   },
@@ -115,12 +117,18 @@ export default {
     }),
     new MiniCssExtractPlugin(),
     new SpriteLoaderPlugin(),
-    new FaviconsWebpackPlugin({
-      logo: './logo.png',
-      favicons: {
-        appName: 'Truth Trick',
-        appDescription: 'A boolean expression visualiser',
-        start_url: '/truth-trick/',
+    new WebpackFaviconsPlugin({
+      src: 'logo.png',
+      appName: 'Truth Trick',
+      appDescription: 'A boolean expression visualiser',
+      path: 'assets',
+      start_url: '/truth-trick/',
+      display: 'fullscreen',
+      icons: {
+        favicons: true,
+        android: true,
+        appleIcon: true,
+        appleStartup: true,
       },
     }),
     ...(process.env.WEBPACK_SERVE
