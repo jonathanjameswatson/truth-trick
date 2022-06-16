@@ -13,28 +13,22 @@ jobs:
     steps:
     -
       name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     -
-      name: Use Node.js 12.x
-      uses: actions/setup-node@v1
+      name: Use Node.js 14
+      uses: actions/setup-node@v3
       with:
-        node-version: 12.x
+        node-version: 14
     -
       name: Install
-      run: npm install
+      run: yarn install
     -
        name: Test
-       run: npm run test
+       run: yarn test
     -
       name: Generate
       if: success()
-      run: npm run build
-    -
-      name: Check GitHub Pages status
-      if: success()
-      uses: crazy-max/ghaction-github-status@v1
-      with:
-        pages_threshold: major_outage
+      run: yarn build
     -
       name: Deploy
       if: success()
